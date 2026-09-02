@@ -10,6 +10,7 @@
             o.sub_name,
             sd.logo,
             sd.logo_2,
+            sd.logo_2_alt,
             sd.title,
             sd.short_description
         FROM oursites o

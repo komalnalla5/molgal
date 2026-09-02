@@ -26,6 +26,7 @@ $siteStmt = mysqli_prepare($conn, "SELECT
             o.site_name,
             o.sub_name,
             sd.logo,
+            sd.logo_alt,
             sd.title,
             sd.short_description
         FROM oursites o
@@ -94,7 +95,7 @@ $superScriptClass  = $brandSuper['class'];
                             echo ($headerSite && !empty($headerSite['logo']))
                                 ? htmlspecialchars($headerSite['logo'])
                                 : 'assets/img/molprop-white.png';
-                            ?>" style="width:200px;" alt="<?php echo htmlspecialchars($headerSite['logo'])?>" loading="lazy">
+                            ?>" style="width:200px;" alt="<?php echo htmlspecialchars($headerSite['logo_alt'])?>" loading="lazy">
                         </a>
                     </div>
                     <div class="rv-1-header-nav__sidebar">
