@@ -93,6 +93,7 @@ foreach (getCertificate($conn, 'blog') as $certificate) {
       .blog-hero-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
       .blog-hero-shape{ position:absolute; inset:0; width:100%; height:100%; z-index:1; }
       .blog-hero-inner{ position:relative; z-index:2; display:flex; min-height:340px; }
+      .cat-pill:hover {color: #7e3f3f !important;}
       .blog-hero-left{ width:56%; padding:60px 50px; display:flex; flex-direction:column; justify-content:center; color:#fff; }
       .blog-hero-left h1{ font-family:'Playfair Display', serif; font-size:2.6rem; line-height:1.2; margin-bottom:10px; }
       .blog-hero-left p{ opacity:.85; margin-bottom:8px; font-size:1rem; }

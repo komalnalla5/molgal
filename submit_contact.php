@@ -1,4 +1,8 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 ob_start();
 error_reporting(E_ALL);
 ini_set('display_errors', '0');
@@ -26,6 +30,42 @@ try {
     /* Hidden spam field must stay empty. */
     if (trim((string) ($_POST['website_url'] ?? '')) !== '') {
         header('Location: contact.php?sent=1&mail=0');
+        exit;
+    }
+
+    /* One-time, server-side CAPTCHA verification. */
+    $captchaToken = strtolower(
+        trim((string) ($_POST['captcha_token'] ?? ''))
+    );
+    $captchaAnswer = trim((string) ($_POST['captcha_answer'] ?? ''));
+    $captchaChallenges = $_SESSION['contact_captchas'] ?? [];
+    $captchaChallenge = is_array($captchaChallenges)
+        ? ($captchaChallenges[$captchaToken] ?? null)
+        : null;
+
+    // Consume the challenge immediately so the same answer cannot be reused.
+    if (isset($_SESSION['contact_captchas'][$captchaToken])) {
+        unset($_SESSION['contact_captchas'][$captchaToken]);
+    }
+
+    $captchaCreatedAt = is_array($captchaChallenge)
+        ? (int) ($captchaChallenge['created_at'] ?? 0)
+        : 0;
+    $captchaExpectedAnswer = is_array($captchaChallenge)
+        ? (string) ($captchaChallenge['answer'] ?? '')
+        : '';
+    $captchaIsValid = strlen($captchaToken) === 32
+        && ctype_xdigit($captchaToken)
+        && $captchaCreatedAt > 0
+        && (time() - $captchaCreatedAt) <= 900
+        && preg_match('/^[0-9]{1,2}$/', $captchaAnswer)
+        && hash_equals($captchaExpectedAnswer, $captchaAnswer);
+
+    if (!$captchaIsValid) {
+        $_SESSION['contact_public_error'] =
+            'Security answer is incorrect or expired. Please try again.';
+
+        header('Location: contact.php?error=captcha');
         exit;
     }
 
@@ -140,6 +180,36 @@ try {
         if (!empty($field['required']) && $value === '') {
             $label = $field['label'] ?? $fieldName;
             throw new RuntimeException('Required field is empty: ' . $label);
+        }
+
+        if (($field['type'] ?? '') === 'tel' && $value !== '') {
+            $countryCodeField = $fieldName . '_country_code';
+            $countryCode = trim(
+                (string) ($_POST[$countryCodeField] ?? '')
+            );
+
+            if (!preg_match('/^\+[1-9][0-9]{0,3}$/', $countryCode)) {
+                throw new RuntimeException(
+                    'Please enter a valid country code, for example +91.'
+                );
+            }
+
+            if (!preg_match('/^[0-9().\-\s]+$/', $value)) {
+                throw new RuntimeException(
+                    'Please enter a valid phone number.'
+                );
+            }
+
+            $phoneDigits = preg_replace('/\D/', '', $value);
+            $phoneLength = strlen($phoneDigits);
+
+            if ($phoneLength < 7 || $phoneLength > 15) {
+                throw new RuntimeException(
+                    'Phone number must contain 7 to 15 digits.'
+                );
+            }
+
+            $value = $countryCode . ' ' . $value;
         }
 
         if (($field['type'] ?? '') === 'email' && $value !== '') {
