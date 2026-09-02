@@ -1,0 +1,381 @@
+/* ------------------------------------------------------------------
+   Shared styles for the admin panel (register, login, dashboard).
+   ------------------------------------------------------------------ */
+/* Simple auth design page Design1 */
+/* 
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #f4f5f7;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-card {
+    width: 340px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem 1.5rem;
+    box-shadow: 0 0 0 6px rgba(186, 117, 23, 0.12);
+}
+
+.icon-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FAEEDA;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    font-size: 16px;
+}
+
+.register-card h1 {
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.register-card p.subtitle {
+    font-size: 12px;
+    color: #6b6b6b;
+    text-align: center;
+    margin: 4px 0 1rem;
+}
+
+.field {
+    margin-bottom: 10px;
+}
+
+.field label {
+    display: block;
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-bottom: 4px;
+}
+
+.field input {
+    width: 100%;
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.field input:focus {
+    outline: none;
+    border-color: #EF9F27;
+}
+
+button {
+    width: 100%;
+    height: 36px;
+    margin-top: 4px;
+    background: #EF9F27;
+    border: none;
+    color: #412402;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 0 4px rgba(239, 159, 39, 0.18);
+}
+
+button:hover {
+    background: #e08f1a;
+}
+
+.footer-link {
+    text-align: center;
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-top: 10px;
+}
+
+.footer-link a {
+    color: #BA7517;
+    text-decoration: none;
+}
+
+.message {
+    font-size: 12px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.message.error {
+    background: #FAECE7;
+    color: #993C1D;
+}
+
+.message.success {
+    background: #EAF3DE;
+    color: #3B6D11;
+} */
+ 
+/* ------------------------------------------------------------- */
+/* Final design  */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+ 
+body {
+    background: #f4f5f7;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.auth-wrapper {
+    display: flex;
+    position: relative;
+    width: 760px;
+    min-height: 460px;
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+ 
+.auth-left {
+    flex: 0 0 46%;
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+    background: linear-gradient(160deg, #FDBB5C 0%, #EF9F27 60%, #d97f0f 100%);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #ffffff;
+}
+ 
+.auth-left::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    right: -45px;
+    top: 15%;
+    background: rgba(255, 255, 255, 0.25);
+}
+ 
+.auth-wrapper::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    left: calc(46% - 55px);
+    top: 74%;
+    background: linear-gradient(160deg, #FDBB5C 0%, #d97f0f 100%);
+    box-shadow: 0 10px 25px rgba(217, 127, 15, 0.35);
+}
+ 
+.auth-wrapper::before {
+    content: "";
+    position: absolute;
+    z-index: 4;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    right: -20px;
+    bottom: -20px;
+    background: linear-gradient(160deg, #FDBB5C 0%, #d97f0f 100%);
+}
+ 
+.auth-left .tag {
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 8px;
+}
+ 
+.auth-left h2 {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+ 
+.auth-left p.desc {
+    font-size: 13px;
+    opacity: 0.9;
+    max-width: 270px;
+    margin-top: 12px;
+}
+ 
+.auth-left .circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+}
+ 
+.auth-left .circle-1 {
+    width: 200px;
+    height: 200px;
+    bottom: -80px;
+    left: -80px;
+}
+ 
+.auth-left .circle-2 {
+    width: 100px;
+    height: 100px;
+    bottom: 50px;
+    left: 90px;
+    background: rgba(255, 255, 255, 0.25);
+}
+ 
+.auth-left .circle-3 {
+    width: 90px;
+    height: 90px;
+    top: -20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.15);
+}
+ 
+.auth-right {
+    position: relative;
+    z-index: 3;
+    background: #ffffff;
+    flex: 1;
+    padding: 2.75rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+ 
+.register-card {
+    width: 100%;
+}
+ 
+.auth-wrapper--compact {
+    min-height: auto;
+}
+ 
+.auth-wrapper--compact .auth-right {
+    padding: 1.75rem 2.25rem;
+}
+ 
+.auth-wrapper--compact .field {
+    margin-bottom: 8px;
+}
+ 
+.icon-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #FAEEDA;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-size: 18px;
+}
+ 
+.register-card h1 {
+    font-size: 19px;
+    font-weight: 600;
+    text-align: center;
+    color: #1a1a1a;
+}
+ 
+.register-card p.subtitle {
+    font-size: 12px;
+    color: #6b6b6b;
+    text-align: center;
+    margin: 4px 0 1.25rem;
+}
+  
+.field {
+    margin-bottom: 12px;
+}
+ 
+.field label {
+    display: block;
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-bottom: 5px;
+}
+ 
+.field input {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 13px;
+}
+ 
+.field input:focus {
+    outline: none;
+    border-color: #EF9F27;
+}
+  
+button {
+    width: 100%;
+    height: 40px;
+    margin-top: 6px;
+    background: #EF9F27;
+    border: none;
+    /* color: #010101; */
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 17px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(239, 159, 39, 0.4);
+}
+ 
+button:hover {
+    background: #e08f1a;
+} 
+.footer-link {
+    text-align: center;
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-top: 12px;
+}
+ 
+.footer-link a {
+    color: #BA7517;
+    text-decoration: none;
+    font-weight: 600;
+} 
+.message {
+    font-size: 12px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+ 
+.message.error {
+    background: #FAECE7;
+    color: #993C1D;
+}
+ 
+.message.success {
+    background: #EAF3DE;
+    color: #3B6D11;
+}
+
