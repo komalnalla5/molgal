@@ -30,7 +30,8 @@ function getCurrentSite($conn)
             site_details.product_meta_keywords,
             site_details.product_meta_description,
             site_details.product_meta_schema,
-            site_details.product_canonical_link
+            site_details.product_canonical_link,
+            site_details.verification_code
         FROM oursites
         LEFT JOIN site_details ON site_details.site_id = oursites.id
         WHERE oursites.id = ?

@@ -22,10 +22,12 @@ if (!defined('DB_HOST')) {
     if ($isLocalEnvironment) {
         define('DB_USER', 'root');
         define('DB_PASS', '');
+        // define('DB_NAME', 'molcal');//local
         define('DB_NAME', 'anmolkamdar_mubyadmin');
     } else {
         define('DB_USER', 'anmolkamdar_muby');
         define('DB_PASS', 'Anmol$$4321$$');
+        // define('DB_NAME', 'molcal'); //local
         define('DB_NAME', 'anmolkamdar_mubyadmin');
     }
 }
