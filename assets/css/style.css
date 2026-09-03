@@ -3530,11 +3530,11 @@ li {
 }
 
 .brand-sup-tm {
-    font-size: 0.9em !important;
-    vertical-align: baseline !important;
+    font-size: 0.7em !important;
+    vertical-align: super !important;
     line-height: 0 !important;
     position: relative !important;
-    top: -0.3em !important;
+    top: -0.1em !important;
 }
 
 .brand-sup-sm {
@@ -3562,7 +3562,7 @@ li {
 }
 
 .a-banner-title__text .brand-sup-tm {
-    font-size: 0.9em !important;
+    font-size: 0.7em !important;
     vertical-align: baseline !important;
     top: -0.55em !important;
 }

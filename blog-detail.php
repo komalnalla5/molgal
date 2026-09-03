@@ -150,6 +150,7 @@ $audit_description = !empty($auditRow['audit_description']) ? $auditRow['audit_d
       .filter-bar form.search-form input{ border:none; outline:none; flex:1; font-family:inherit; }
       .cat-pill{ border:1px solid #ddd; border-radius:8px; padding:8px 18px; font-size:.85rem; text-decoration:none; color:#333; white-space:nowrap; font-weight:500; }
       .cat-pill.active{ background:#7e3f3f; border-color:#7e3f3f; color:#fff !important; }
+      .cat-pill:hover {color: #7e3f3f !important;}
       .sort-select select{ border:1px solid #ddd; border-radius:8px; padding:9px 14px; font-size:.85rem; font-family:inherit; margin-left:auto; }
 
       .blog-layout{ display:flex; gap:28px; max-width:1200px; margin:40px auto; padding:0 20px; align-items:flex-start; }
