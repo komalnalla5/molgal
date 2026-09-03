@@ -65,10 +65,13 @@ $metaVerificationCode = isset($site['verification_code'])
     ? $site['verification_code']
     : '';
 
+$google_tag_manager = isset($site['google_tag_manager'])
+    ? $site['google_tag_manager']
+    : '';
+
 $brandSuper        = getBrandSuperscript($subName);
 $superScript       = $brandSuper['symbol'];
 $superScriptClass  = $brandSuper['class'];
-
 
 // Build absolute URL for og:image
 function toAbsoluteUrl($path) {
@@ -106,13 +109,11 @@ $bannerImageAbsolute = toAbsoluteUrl($bannerImage);
     <meta property="og:type" content="website">
     <meta property="og:image" content="<?php echo htmlspecialchars($bannerImageAbsolute, ENT_QUOTES, 'UTF-8'); ?>">
     <meta name="google-site-verification" content="<?php echo htmlspecialchars($metaVerificationCode); ?>">
-    <!-- Google Tag Manager  make it dynamic vlue-->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-58KKC5H7');</script>
-
+    <?php if ($google_tag_manager !== ''): ?>
+        <script>
+            <?php echo $google_tag_manager; ?>
+        </script>
+    <?php endif; ?> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
@@ -122,7 +123,7 @@ $bannerImageAbsolute = toAbsoluteUrl($bannerImage);
 
     <?php if ($metaSchema !== ''): ?>
         <script type="application/ld+json">
-<?php echo $metaSchema; ?>
+           <?php echo $metaSchema; ?>
         </script>
     <?php endif; ?>
 
