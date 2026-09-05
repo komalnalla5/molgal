@@ -44,7 +44,7 @@ function rt_clean($html) {
 $word_count = str_word_count(strip_tags($blog['content']));
 $rt = max(1, ceil($word_count / 200));
 
-$stmt = mysqli_prepare($conn, "SELECT DISTINCT category FROM blogs WHERE site_id=? AND status='active' AND category IS NOT NULL AND category != ''");
+$stmt = mysqli_prepare($conn, "SELECT DISTINCT category FROM blogs WHERE site_id=? AND status='active' AND category IS NOT NULL AND category != '' ORDER BY category ASC");
 mysqli_stmt_bind_param($stmt, "i", $site_id);
 mysqli_stmt_execute($stmt);
 $category_names = array_column(mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC), 'category');
@@ -148,9 +148,10 @@ $audit_description = !empty($auditRow['audit_description']) ? $auditRow['audit_d
       .filter-bar form.search-form{ display:flex; align-items:center; gap:8px; border:1px solid #ddd; border-radius:8px; padding:9px 14px; flex:1; min-width:180px; color:var(--brand); }
       .filter-bar form.search-form svg{ width:17px; height:17px; flex-shrink:0; }
       .filter-bar form.search-form input{ border:none; outline:none; flex:1; font-family:inherit; }
-      .cat-pill{ border:1px solid #ddd; border-radius:8px; padding:8px 18px; font-size:.85rem; text-decoration:none; color:#333; white-space:nowrap; font-weight:500; }
-      .cat-pill.active{ background:#7e3f3f; border-color:#7e3f3f; color:#fff !important; }
-      .sort-select select{ border:1px solid #ddd; border-radius:8px; padding:9px 14px; font-size:.85rem; font-family:inherit; margin-left:auto; }
+      .category-select select,
+      .sort-select select{ border:1px solid #ddd; border-radius:8px; padding:9px 36px 9px 14px; font-size:.85rem; font-family:inherit; background-color:#fff; color:#333; cursor:pointer; }
+      .category-select select{ min-width:190px; }
+      .sort-select{ margin-left:auto; }
 
       .blog-layout{ display:flex; gap:28px; max-width:1200px; margin:40px auto; padding:0 20px; align-items:flex-start; }
       .blog-main{ flex:2.3; } .blog-sidebar{ flex:1; min-width:280px; display:flex; flex-direction:column; gap:20px; }
@@ -240,10 +241,16 @@ $audit_description = !empty($auditRow['audit_description']) ? $auditRow['audit_d
          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
          <input type="text" name="search" placeholder="Search blogs...">
       </form>
-      <a href="blog.php" class="cat-pill active">All</a>
-      <?php foreach ($category_names as $cat): ?>
-         <a href="blog.php?category=<?php echo urlencode($cat); ?>" class="cat-pill"><?php echo htmlspecialchars($cat); ?></a>
-      <?php endforeach; ?>
+      <form class="category-select" method="GET" action="blog.php">
+         <select name="category" aria-label="Filter blogs by category" onchange="this.form.submit()">
+            <option value="" <?php echo empty($blog['category']) ? 'selected' : ''; ?>>All Categories</option>
+            <?php foreach ($category_names as $cat): ?>
+               <option value="<?php echo htmlspecialchars($cat); ?>" <?php echo (string) $blog['category'] === (string) $cat ? 'selected' : ''; ?>>
+                  <?php echo htmlspecialchars($cat); ?>
+               </option>
+            <?php endforeach; ?>
+         </select>
+      </form>
       <div class="sort-select">
          <select onchange="window.location.href='blog.php?sort='+this.value">
             <option value="latest">Latest</option>

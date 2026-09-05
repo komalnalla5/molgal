@@ -12,7 +12,7 @@ mysqli_stmt_bind_param($stmt, "i", $site_id);
 mysqli_stmt_execute($stmt);
 $total_articles = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt))['c'];
 
-$stmt = mysqli_prepare($conn, "SELECT DISTINCT category FROM blogs WHERE site_id=? AND status='active' AND category IS NOT NULL AND category != ''");
+$stmt = mysqli_prepare($conn, "SELECT DISTINCT category FROM blogs WHERE site_id=? AND status='active' AND category IS NOT NULL AND category != '' ORDER BY category ASC");
 mysqli_stmt_bind_param($stmt, "i", $site_id);
 mysqli_stmt_execute($stmt);
 $categories = mysqli_fetch_all(mysqli_stmt_get_result($stmt), MYSQLI_ASSOC);
@@ -93,7 +93,6 @@ foreach (getCertificate($conn, 'blog') as $certificate) {
       .blog-hero-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
       .blog-hero-shape{ position:absolute; inset:0; width:100%; height:100%; z-index:1; }
       .blog-hero-inner{ position:relative; z-index:2; display:flex; min-height:340px; }
-      .cat-pill:hover {color: #7e3f3f !important;}
       .blog-hero-left{ width:56%; padding:60px 50px; display:flex; flex-direction:column; justify-content:center; color:#fff; }
       .blog-hero-left h1{ font-family:'Playfair Display', serif; font-size:2.6rem; line-height:1.2; margin-bottom:10px; }
       .blog-hero-left p{ opacity:.85; margin-bottom:8px; font-size:1rem; }
@@ -108,9 +107,9 @@ foreach (getCertificate($conn, 'blog') as $certificate) {
       .filter-bar form.search-form{ display:flex; align-items:center; gap:8px; border:1px solid #ddd; border-radius:8px; padding:9px 14px; flex:1; min-width:180px; color:var(--brand); }
       .filter-bar form.search-form svg{ width:17px; height:17px; color:var(--brand); flex-shrink:0; }
       .filter-bar form.search-form input{ border:none; outline:none; flex:1; font-family:inherit; }
-      .cat-pill{ border:1px solid #ddd; border-radius:8px; padding:8px 18px; font-size:.85rem; text-decoration:none; color:#333; white-space:nowrap; font-weight:500; }
-      .cat-pill.active{ background:#7e3f3f; border-color:var(--brand); color:#fff !important; }
-      .sort-select select{ border:1px solid #ddd; border-radius:8px; padding:9px 14px; font-size:.85rem; font-family:inherit; }
+      .category-select select,
+      .sort-select select{ border:1px solid #ddd; border-radius:8px; padding:9px 36px 9px 14px; font-size:.85rem; font-family:inherit; background-color:#fff; color:#333; cursor:pointer; }
+      .category-select select{ min-width:190px; }
 
       .blog-layout{ display:flex; gap:28px; max-width:1200px; margin:40px auto; padding:0 20px; align-items:flex-start; }
       .blog-main{ flex:2.5; } .blog-sidebar{ flex:1; min-width:280px; }
@@ -212,10 +211,18 @@ foreach (getCertificate($conn, 'blog') as $certificate) {
          <input type="text" name="search" placeholder="Search blogs..." value="<?php echo htmlspecialchars($search); ?>">
       </form>
 
-      <a href="blog.php?sort=<?php echo urlencode($sort); ?>" class="cat-pill <?php echo $category==='' ? 'active' : ''; ?>">All</a>
-      <?php foreach ($category_names as $cat): ?>
-         <a href="blog.php?category=<?php echo urlencode($cat); ?>&sort=<?php echo urlencode($sort); ?>" class="cat-pill <?php echo $category===$cat ? 'active' : ''; ?>"><?php echo htmlspecialchars($cat); ?></a>
-      <?php endforeach; ?>
+      <form class="category-select" method="GET" action="blog.php">
+         <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
+         <input type="hidden" name="sort" value="<?php echo htmlspecialchars($sort); ?>">
+         <select name="category" aria-label="Filter blogs by category" onchange="this.form.submit()">
+            <option value="" <?php echo $category === '' || $category === 'All' ? 'selected' : ''; ?>>All Categories</option>
+            <?php foreach ($category_names as $cat): ?>
+               <option value="<?php echo htmlspecialchars($cat); ?>" <?php echo $category === $cat ? 'selected' : ''; ?>>
+                  <?php echo htmlspecialchars($cat); ?>
+               </option>
+            <?php endforeach; ?>
+         </select>
+      </form>
 
       <form class="sort-select" style="margin-left:auto;" method="GET" action="blog.php">
          <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">

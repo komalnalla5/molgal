@@ -755,12 +755,14 @@ unset($_SESSION['contact_public_error']);
             <?php endif; ?>
 
             <form
-                action="submit_contact.php"
+                action="submit_form.php"
                 method="POST"
                 id="contactPublicForm"
                 class="contact-form-fields"
                 novalidate
             >
+                <input type="hidden" name="form_type" value="contact">
+
                 <input
                     type="text"
                     name="website_url"
