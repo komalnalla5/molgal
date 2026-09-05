@@ -161,6 +161,25 @@ while ($row = mysqli_fetch_assoc($specResult)) {
 }
 mysqli_stmt_close($specStmt);
 
+// Fetch typical properties for this product (if any)
+$propStmt = mysqli_prepare($conn, "SELECT properties, typical_value, sr_no FROM product_properties WHERE product_id = ? AND site_id = ? ORDER BY sr_no ASC");
+mysqli_stmt_bind_param($propStmt, 'ii', $product['id'], $siteIdParam);
+mysqli_stmt_execute($propStmt);
+$propResult = mysqli_stmt_get_result($propStmt);
+$typicalProperties = [];
+while ($row = mysqli_fetch_assoc($propResult)) {
+       $propertyName = ucwords(
+        strtolower(trim($row['properties']))
+        );
+         $propertyName = str_ireplace(
+            'cas',
+            'CAS',
+            $propertyName
+        );
+$row['properties'] = $propertyName;
+    $typicalProperties[] = $row;
+}
+mysqli_stmt_close($propStmt);
 
 // Fetch site-wide disclaimer
 $discStmt = mysqli_prepare($conn, "SELECT description FROM disclaimers WHERE site_id = ? AND status = 'active'");
@@ -173,7 +192,7 @@ mysqli_stmt_close($discStmt);
 // helper file code fetch oursite data
 $currentSite = getCurrentSite($conn);
 
-$hasTypicalProps = !empty($product['cas_number']) || !empty($product['molecular_formula']) || !empty($product['molecular_weight']);
+$hasTypicalProps = !empty($typicalProperties);
 
  $brandSuper        = getBrandSuperscript($currentSite['sub_name']);
 $superScript       = $brandSuper['symbol'];
@@ -272,6 +291,7 @@ $superScriptClass  = $brandSuper['class'];
       </div>
 
       <!-- property formula section -->
+    <!-- property formula section -->
     <?php if ($hasTypicalProps): ?>
     <div class="det-wrapper">
         <div class="spec-table-det-container">
@@ -281,16 +301,13 @@ $superScriptClass  = $brandSuper['class'];
                     <tr><th>#</th><th>PROPERTY</th><th>TYPICAL VALUE</th></tr>
                 </thead>
                 <tbody>
-                    <?php $i = 1; ?>
-                    <?php if (!empty($product['cas_number'])): ?>
-                        <tr><td><?php echo $i++; ?></td><td>CAS Number</td><td><?php echo renderProductFormulaText($product['cas_number']); ?></td></tr>
-                    <?php endif; ?>
-                    <?php if (!empty($product['molecular_formula'])): ?>
-                        <tr><td><?php echo $i++; ?></td><td>Molecular Formula</td><td><?php echo renderProductFormulaHtml(strip_tags((string) $product['molecular_formula'], '<sub>')); ?></td></tr>
-                    <?php endif; ?>
-                    <?php if (!empty($product['molecular_weight'])): ?>
-                        <tr><td><?php echo $i++; ?></td><td>Molecular Weight</td><td><?php echo renderProductFormulaText($product['molecular_weight']); ?></td></tr>
-                    <?php endif; ?>
+                    <?php foreach ($typicalProperties as $index => $prop): ?>
+                        <tr>
+                            <td><?php echo $index + 1; ?></td>
+                            <td><?php echo renderProductFormulaText($prop['properties']); ?></td>
+                            <td><?php echo renderProductFormulaHtml(strip_tags((string) $prop['typical_value'], '<sub>')); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
