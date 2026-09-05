@@ -3573,3 +3573,31 @@ li {
     position: relative !important;
     top: -0.6em !important;
 }
+
+/* sir */
+
+/* bala sir */
+ .enquiry-honeypot {
+        position: absolute !important;
+        left: -9999px !important;
+        width: 1px !important;
+        height: 1px !important;
+        overflow: hidden !important;
+    }
+    .enquiry-message {
+        margin: 0 0 14px;
+        padding: 10px 14px;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .enquiry-message-success {
+        color: #1b5e20;
+        background: #eafaf1;
+        border-color: #9ad4a4;
+    }
+    .enquiry-message-error {
+        color: #842029;
+        background: #f8d7da;
+        border-color: #f1aeb5;
+    }

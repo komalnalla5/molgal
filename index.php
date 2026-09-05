@@ -1,4 +1,8 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
@@ -25,7 +29,6 @@ try {
         '</pre>'
     );
 }
-
 $siteName = isset($site['name']) ? $site['name'] : '';
 $subName  = isset($site['sub_name']) ? trim($site['sub_name']) : '';
 
@@ -84,6 +87,110 @@ function toAbsoluteUrl($path) {
 }
 $bannerImageAbsolute = toAbsoluteUrl($bannerImage);
 
+/*
+|--------------------------------------------------------------------------
+| Homepage enquiry form settings
+|--------------------------------------------------------------------------
+| The page keeps working safely if the table is not installed; the form only
+| appears after this website has a settings row. Run the supplied SQL first.
+*/
+$enquirySettings = [
+    'name_placeholder'    => 'Your Name',
+    'name_required'       => 1,
+    'email_placeholder'   => 'Email',
+    'email_required'      => 1,
+    'product_placeholder' => ($siteName !== '' ? $siteName : 'Select') . ' Products',
+    'product_required'    => 1,
+    'submit_button_text'  => 'Enquire Now',
+    'notify_email'        => 'ask@mubychem.com',
+    'success_message'     => 'Thank you for your enquiry. Our team will contact you shortly.',
+    'status'              => 'active',
+];
+$enquirySettingsFound = false;
+
+try {
+    $enquirySettingsStmt = mysqli_prepare(
+        $conn,
+        "SELECT name_placeholder,
+                name_required,
+                email_placeholder,
+                email_required,
+                product_placeholder,
+                product_required,
+                submit_button_text,
+                notify_email,
+                success_message,
+                status
+         FROM enquiry_form_settings
+         WHERE site_id = ?
+         LIMIT 1"
+    );
+
+    if ($enquirySettingsStmt) {
+        $enquirySiteId = (int) SITE_ID;
+        mysqli_stmt_bind_param($enquirySettingsStmt, 'i', $enquirySiteId);
+        mysqli_stmt_execute($enquirySettingsStmt);
+        $savedEnquirySettings = mysqli_stmt_get_result($enquirySettingsStmt)->fetch_assoc();
+        mysqli_stmt_close($enquirySettingsStmt);
+
+        if (is_array($savedEnquirySettings)) {
+            $enquirySettings = array_merge($enquirySettings, $savedEnquirySettings);
+            $enquirySettingsFound = true;
+        }
+    }
+} catch (Throwable $e) {
+    error_log('Homepage enquiry settings error: ' . $e->getMessage());
+}
+
+/* Only active, non-deleted products belonging to this website are selectable. */
+$enquiryProducts = [];
+try {
+    $enquiryProductsStmt = mysqli_prepare(
+        $conn,
+        "SELECT id, brand_name, product_code, product_name
+         FROM products
+         WHERE site_id = ?
+           AND status = 'active'
+           AND is_deleted = 0
+         ORDER BY brand_name ASC, product_code ASC, product_name ASC"
+    );
+
+    if ($enquiryProductsStmt) {
+        $enquirySiteId = (int) SITE_ID;
+        mysqli_stmt_bind_param($enquiryProductsStmt, 'i', $enquirySiteId);
+        mysqli_stmt_execute($enquiryProductsStmt);
+        $enquiryProductsResult = mysqli_stmt_get_result($enquiryProductsStmt);
+        $enquiryProducts = mysqli_fetch_all($enquiryProductsResult, MYSQLI_ASSOC);
+        mysqli_stmt_close($enquiryProductsStmt);
+    }
+} catch (Throwable $e) {
+    error_log('Homepage enquiry products error: ' . $e->getMessage());
+}
+
+if (
+    empty($_SESSION['enquiry_csrf_token']) ||
+    !is_string($_SESSION['enquiry_csrf_token']) ||
+    strlen($_SESSION['enquiry_csrf_token']) !== 64
+) {
+    $_SESSION['enquiry_csrf_token'] = bin2hex(random_bytes(32));
+}
+
+$enquirySuccess  = (string) ($_SESSION['enquiry_public_success'] ?? '');
+$enquiryError    = (string) ($_SESSION['enquiry_public_error'] ?? '');
+$enquiryOldInput = is_array($_SESSION['enquiry_old_input'] ?? null)
+    ? $_SESSION['enquiry_old_input']
+    : [];
+
+unset(
+    $_SESSION['enquiry_public_success'],
+    $_SESSION['enquiry_public_error'],
+    $_SESSION['enquiry_old_input']
+);
+
+$showEnquiryForm =
+    $enquirySettingsFound &&
+    ($enquirySettings['status'] ?? 'active') === 'active';
+
 ?>
 <!DOCTYPE html>
 <html lang="en" style="overflow-y:scroll;">
@@ -132,10 +239,7 @@ $bannerImageAbsolute = toAbsoluteUrl($bannerImage);
     </style>
 <?php include __DIR__ . '/includes/header.php'; ?>
 </head>
-
 <body>
-
-
 <!-- Banner section -->
 <section class="a-banner">
     <img src="<?php echo htmlspecialchars($bannerImage, ENT_QUOTES, 'UTF-8'); ?>"
@@ -175,54 +279,120 @@ $bannerImageAbsolute = toAbsoluteUrl($bannerImage);
     </div>
 </section>
 
-<!-- Enquiry form section -->
-<section class="enquiry-form-section">
+<?php if ($showEnquiryForm): ?>
+<!-- Dynamic homepage enquiry form -->
+<section class="enquiry-form-section" id="enquiry-form">
     <div class="form-container">
-        <form class="enquiry-form"
-              method="POST"
-              action="enquiry-form-handler.php">
+        <?php if ($enquirySuccess !== ''): ?>
+            <div class="enquiry-message enquiry-message-success" role="status">
+                <?php echo htmlspecialchars($enquirySuccess, ENT_QUOTES, 'UTF-8'); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($enquiryError !== ''): ?>
+            <div class="enquiry-message enquiry-message-error" role="alert">
+                <?php echo htmlspecialchars($enquiryError, ENT_QUOTES, 'UTF-8'); ?>
+            </div>
+        <?php endif; ?>
+
+        <form class="enquiry-form" method="POST" action="submit_form.php">
+            <input type="hidden" name="form_type" value="enquiry">
+            <input type="hidden" name="csrf_token"
+                   value="<?php echo htmlspecialchars($_SESSION['enquiry_csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+
+            <div class="enquiry-honeypot" aria-hidden="true">
+                <label for="enquiry_website_url">Website</label>
+                <input type="text" id="enquiry_website_url" name="website_url"
+                       tabindex="-1" autocomplete="off">
+            </div>
 
             <div class="form-group">
                 <input type="text"
                        id="name"
                        name="name"
-                       placeholder="Your Name"
-                       required>
+                       maxlength="150"
+                       autocomplete="name"
+                       aria-label="Name"
+                       placeholder="<?php echo htmlspecialchars($enquirySettings['name_placeholder'], ENT_QUOTES, 'UTF-8'); ?>"
+                       value="<?php echo htmlspecialchars((string) ($enquiryOldInput['name'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                       <?php echo !empty($enquirySettings['name_required']) ? 'required' : ''; ?>>
             </div>
 
             <div class="form-group">
                 <input type="email"
                        id="email"
                        name="email"
-                       placeholder="Email"
-                       required>
+                       maxlength="255"
+                       autocomplete="email"
+                       aria-label="Email"
+                       placeholder="<?php echo htmlspecialchars($enquirySettings['email_placeholder'], ENT_QUOTES, 'UTF-8'); ?>"
+                       value="<?php echo htmlspecialchars((string) ($enquiryOldInput['email'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
+                       <?php echo !empty($enquirySettings['email_required']) ? 'required' : ''; ?>>
             </div>
 
             <div class="form-group select-group">
-                <select id="product" name="product" required>
-                    <option value="" disabled selected>
-                         <?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?><?php if ($subName !== ''): ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($subName, ENT_QUOTES,'UTF-8'); ?></sup><?php endif; ?> Products
+                <select id="product_id" name="product_id" aria-label="Product"
+                        <?php echo !empty($enquirySettings['product_required']) ? 'required' : ''; ?>>
+                    <option value=""
+                        <?php echo !empty($enquirySettings['product_required']) ? 'disabled' : ''; ?>
+                        <?php echo empty($enquiryOldInput['product_id']) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($enquirySettings['product_placeholder'], ENT_QUOTES, 'UTF-8'); ?>
                     </option>
-                    
 
-                    <?php if (!empty($products)): ?>
-                        <?php foreach ($products as $product): ?>
-                           <option value="<?php echo htmlspecialchars($product['product_code']); ?>">
-                                <?php
-                                echo htmlspecialchars($product['brand_name']) . '&nbsp;&nbsp;&nbsp;' . htmlspecialchars($product['product_code']);
-                                ?>
-                            </option>
-                        <?php endforeach; ?>
-                        <?php endif; ?>
+                    <?php foreach ($enquiryProducts as $product): ?>
+                        <?php
+                        $productLabel = trim(
+                            (string) ($product['brand_name'] ?? '') . ' ' .
+                            (string) ($product['product_code'] ?? '')
+                        );
+                        if ($productLabel === '') {
+                            $productLabel = (string) ($product['product_name'] ?? 'Product');
+                        }
+                        ?>
+                        <option value="<?php echo (int) $product['id']; ?>"
+                            <?php echo (int) ($enquiryOldInput['product_id'] ?? 0) === (int) $product['id'] ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($productLabel, ENT_QUOTES, 'UTF-8'); ?>
+                        </option>
+                    <?php endforeach; ?>
                 </select>
             </div>
 
             <div class="form-group button-group">
-                <button type="submit">Enquire Now</button>
+                <button type="submit">
+                    <?php echo htmlspecialchars($enquirySettings['submit_button_text'], ENT_QUOTES, 'UTF-8'); ?>
+                </button>
             </div>
         </form>
     </div>
 </section>
+
+<style>
+    .enquiry-honeypot {
+        position: absolute !important;
+        left: -9999px !important;
+        width: 1px !important;
+        height: 1px !important;
+        overflow: hidden !important;
+    }
+    .enquiry-message {
+        margin: 0 0 14px;
+        padding: 10px 14px;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .enquiry-message-success {
+        color: #1b5e20;
+        background: #eafaf1;
+        border-color: #9ad4a4;
+    }
+    .enquiry-message-error {
+        color: #842029;
+        background: #f8d7da;
+        border-color: #f1aeb5;
+    }
+</style>
+<?php endif; ?>
 
 <!-- Products listing section -->
 <?php include __DIR__ . '/includes/product-grid.php'; ?>
