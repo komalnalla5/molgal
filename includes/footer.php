@@ -1,3 +1,33 @@
+<?php
+ include_once('helper.php');
+include_once('config.php');
+
+$siteStmt = mysqli_prepare($conn, "SELECT 
+            o.id,
+            o.name,
+            o.site_name,
+            o.sub_name,
+            sd.logo,
+            sd.logo_alt,
+            sd.title,
+            sd.short_description
+        FROM oursites o
+        LEFT JOIN site_details sd 
+            ON sd.site_id = o.id
+        WHERE o.id = ?
+          AND o.status = 'active'");
+$siteIdParam = SITE_ID; // From config file
+mysqli_stmt_bind_param($siteStmt, 'i', $siteIdParam);
+mysqli_stmt_execute($siteStmt);
+$siteResult = mysqli_stmt_get_result($siteStmt);
+$headerSite = mysqli_fetch_assoc($siteResult);
+mysqli_stmt_close($siteStmt);
+
+
+if (!$headerSite) {
+    die('Site not found or inactive.');
+}
+?>
 <footer>
     <div class="footer-sec">
         <div class="container">
@@ -5,7 +35,11 @@
                 <div class="col-xl-4 col-lg-4 col-md-6">
                     <div class=" footer-logo">
                         <a href="index.php">
-                            <img src="assets/img/molgal-white.png" loading="lazy" style="width: 232px;" alt="logo">
+                           <img src="<?php
+                            echo ($headerSite && !empty($headerSite['logo']))
+                                ? htmlspecialchars($headerSite['logo'])
+                                : 'assets/img/molprop-white.png';
+                            ?>" style="width:200px;" alt="<?php echo htmlspecialchars($headerSite['logo_alt'])?>" loading="lazy">
                         </a><br>
                         <div class="custom-footer">
                             <a href="tel: +91-22-2377 0100">
