@@ -397,6 +397,7 @@ $showEnquiryForm =
 <!-- Products listing section -->
 <?php include __DIR__ . '/includes/product-grid.php'; ?>
 
+<?php if (!empty($certificates)): ?>
 <!-- Certifications section -->
 <section id="certifications">
     <div class="container" data-aos="zoom-out">
@@ -441,6 +442,7 @@ $showEnquiryForm =
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <!-- Manufacturing facility section -->
 <section class="first-sec" style="margin-bottom:30px;">

@@ -261,7 +261,7 @@ $superScriptClass  = $brandSuper['class'];
                         <?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo renderProductFormulaText($product['product_code']); ?>
                     </h2>
                     <?php if (!empty($product['intro_by'])): ?>
-                    <p style="margin-right: 119px;">
+                    <p style="margin-right: 50px;">
                       by <strong><?php echo renderProductFormulaText($product['intro_by']); ?></strong>
                     </p>
                     <?php endif; ?>

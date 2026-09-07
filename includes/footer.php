@@ -27,6 +27,7 @@ mysqli_stmt_close($siteStmt);
 if (!$headerSite) {
     die('Site not found or inactive.');
 }
+$certificates = $certificates ?? [];
 ?>
 <footer>
     <div class="footer-sec">
@@ -137,13 +138,12 @@ if (!$headerSite) {
     integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
 </script>
 <script src="assets/js/script.js"></script>
-
-
+<?php $certCount = count($certificates); ?>
 <script>
     var swiper = new Swiper(".productSlider", {
         slidesPerView: 5,
         spaceBetween: 30,
-        loop: true,
+        loop: <?php echo $certCount > 6 ? 'true' : 'false'; ?>,
         navigation: {
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev"
@@ -257,12 +257,9 @@ if (!$headerSite) {
         }, 2000); 
     });
 
-
 </script>
 
-
-
-// language 
+<!-- language  -->
 <div id="google_translate_element" style="display:none;"></div>
 <script>
     // Initialize Google Translate
