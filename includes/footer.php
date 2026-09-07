@@ -132,148 +132,193 @@ $certificates = $certificates ?? [];
     </div>
 </footer>
 
-<script src="assets/js/script.js">
-
-</script>
-<!-- Include Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-<?php $certCount = count($certificates); ?>
-<script>
-var swiper = new Swiper(".productSlider", {
-    slidesPerView: 5,
-    spaceBetween: 30,
-    loop: <?php echo $certCount > 6 ? 'true' : 'false'; ?>,
-    navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev"
-    },
-    autoplay: {
-        delay: 2500,
-        disableOnInteraction: false
-    },
-    breakpoints: {
-        0: {
-            slidesPerView: 1
-        },
-        768: {
-            slidesPerView: 2
-        },
-        1024: {
-            slidesPerView: 6
-        }
-    }
-});
-</script>
-
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const header = document.querySelector('.to-be-fixed');
-    const mobileMenuButton = document.getElementById('rv-1-header-mobile-menu-btn');
-    const sidebar = document.querySelector('.rv-1-header-nav__sidebar');
-    const sidebarCloseButton = document.querySelector('.sidebar-close-btn');
-    const mobileMenuOverlay = document.createElement('div'); // Create overlay dynamically
-    mobileMenuOverlay.classList.add('mobile-menu-overlay');
-    document.body.appendChild(mobileMenuOverlay); // Add overlay to body
-
-    // Sticky Header Logic
-    const handleScroll = () => {
-        if (window.scrollY >
-            0) { // Or header.offsetHeight if you want it to stick after scrolling past its own height
-            header.classList.add('fixed');
-        } else {
-            header.classList.remove('fixed');
-        }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    // Call once on load to check initial scroll position
-    handleScroll();
-
-    // Mobile Menu Toggle Logic
-    const toggleMobileMenu = () => {
-        sidebar.classList.toggle('open');
-        mobileMenuOverlay.classList.toggle('show');
-        document.body.classList.toggle('no-scroll'); // Optional: Prevent body scrolling when menu is open
-    };
-
-    mobileMenuButton.addEventListener('click', toggleMobileMenu);
-    sidebarCloseButton.addEventListener('click', toggleMobileMenu);
-    mobileMenuOverlay.addEventListener('click', toggleMobileMenu); // Close when clicking outside
-
-});
-</script>
-
-
-<!-- <script src="assets/js/main.js"> -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
 </script>
-
+<script src="assets/js/script.js"></script>
+<?php $certCount = count($certificates); ?>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const cardsPerPage = 8;
-    const cardContainer = document.getElementById("card-container");
-    const cards = Array.from(cardContainer.getElementsByClassName("product-card"));
-    const prevBtn = document.getElementById("prev-btn");
-    const nextBtn = document.getElementById("next-btn");
-    const pageInfo = document.getElementById("page-info");
+    var swiper = new Swiper(".productSlider", {
+        slidesPerView: 5,
+        spaceBetween: 30,
+        loop: <?php echo $certCount > 6 ? 'true' : 'false'; ?>,
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+        },
+        autoplay: {
+            delay: 2500,
+            disableOnInteraction: false
+        },
+        breakpoints: {
+            0: {
+                slidesPerView: 1
+            },
+            768: {
+                slidesPerView: 2
+            },
+            1024: {
+                slidesPerView: 6
+            }
+        }
+    });
 
-    let currentPage = 1;
-    const totalPages = Math.ceil(cards.length / cardsPerPage);
+    document.addEventListener('DOMContentLoaded', () => {
+        const header = document.querySelector('.to-be-fixed');
+        const mobileMenuButton = document.getElementById('rv-1-header-mobile-menu-btn');
+        const sidebar = document.querySelector('.rv-1-header-nav__sidebar');
+        const sidebarCloseButton = document.querySelector('.sidebar-close-btn');
+        const mobileMenuOverlay = document.createElement('div');
+        mobileMenuOverlay.classList.add('mobile-menu-overlay');
+        document.body.appendChild(mobileMenuOverlay); 
 
-    function updatePage() {
-        const start = (currentPage - 1) * cardsPerPage;
-        const end = start + cardsPerPage;
+        const handleScroll = () => {
+            if (window.scrollY >
+                0) {
+                header.classList.add('fixed');
+            } else {
+                header.classList.remove('fixed');
+            }
+        };
 
-        cards.forEach((card, index) => {
-            card.style.display = (index >= start && index < end) ? "block" : "none";
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
+        // Mobile Menu Toggle Logic
+        const toggleMobileMenu = () => {
+            sidebar.classList.toggle('open');
+            mobileMenuOverlay.classList.toggle('show');
+            document.body.classList.toggle('no-scroll'); 
+        };
+
+        mobileMenuButton.addEventListener('click', toggleMobileMenu);
+        sidebarCloseButton.addEventListener('click', toggleMobileMenu);
+        mobileMenuOverlay.addEventListener('click', toggleMobileMenu); 
+
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const cardsPerPage = 8;
+        const cardContainer = document.getElementById("card-container");
+        const cards = Array.from(cardContainer.getElementsByClassName("product-card"));
+        const prevBtn = document.getElementById("prev-btn");
+        const nextBtn = document.getElementById("next-btn");
+        const pageInfo = document.getElementById("page-info");
+
+        let currentPage = 1;
+        const totalPages = Math.ceil(cards.length / cardsPerPage);
+
+        function updatePage() {
+            const start = (currentPage - 1) * cardsPerPage;
+            const end = start + cardsPerPage;
+
+            cards.forEach((card, index) => {
+                card.style.display = (index >= start && index < end) ? "block" : "none";
+            });
+
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+        }
+
+        prevBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePage();
+            }
         });
 
-        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-        prevBtn.disabled = currentPage === 1;
-        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.addEventListener("click", () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePage();
+            }
+        });
+
+        updatePage();
+    });
+
+    $(document).ready(function() {
+        $('.fancybox-icon-title').on('click', function() {
+            $(this).siblings('.fancybox-body').find('.fancybox-desc-wrapper').slideToggle();
+        });
+    });
+
+    $(document).ready(function() {
+        setTimeout(function() {
+            const $target = $('#page-content');
+
+            if ($target.length) {
+                $('html, body').animate({
+                    scrollTop: $target.offset().top
+                }, 1000);
+            }
+        }, 2000); 
+    });
+
+</script>
+
+<!-- language  -->
+<div id="google_translate_element" style="display:none;"></div>
+<script>
+    // Initialize Google Translate
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+            { pageLanguage: 'en' },
+            'google_translate_element'
+        );
     }
 
-    prevBtn.addEventListener("click", () => {
-        if (currentPage > 1) {
-            currentPage--;
-            updatePage();
+    setInterval(function () {
+        if (document.body.style.top && document.body.style.top !== '0px') {
+            document.body.style.top = '0px';
+        }
+        var banner = document.querySelector('iframe.skiptranslate');
+        if (banner) {
+            banner.style.display = 'none';
+        }
+    }, 300);
+
+    // Language switcher
+    document.addEventListener('DOMContentLoaded', function () {
+        const langOptions = document.querySelectorAll('.lang-option');
+        const currentLangFlag = document.getElementById('currentLangFlag');
+        const currentLangName = document.getElementById('currentLangName');
+
+        function setGoogleTranslateLanguage(langCode) {
+            const cookieValue = '/en/' + langCode;
+            document.cookie = 'googtrans=' + cookieValue + '; path=/';
+            document.cookie = 'googtrans=' + cookieValue + '; path=/; domain=' + window.location.hostname;
+            window.location.reload();
+        }
+
+        langOptions.forEach(function (option) {
+            option.addEventListener('click', function (e) {
+                e.preventDefault();
+                const langCode = this.getAttribute('data-lang');
+                const langName = this.getAttribute('data-name');
+                const flagSrc = this.querySelector('.lang-flag').getAttribute('src');
+                if (currentLangFlag) currentLangFlag.src = flagSrc;
+                if (currentLangName) currentLangName.textContent = langName;
+                localStorage.setItem('preferredLang', langCode);
+                setGoogleTranslateLanguage(langCode);
+            });
+        });
+
+       const savedLang = localStorage.getItem('preferredLang');
+        if (savedLang && savedLang !== 'en') {
+            const matchedOption = document.querySelector('.lang-option[data-lang="' + savedLang + '"]');
+            if (matchedOption) {
+                const flagSrc = matchedOption.querySelector('.lang-flag').getAttribute('src');
+                const langName = matchedOption.getAttribute('data-name');
+                if (currentLangFlag) {
+                    currentLangFlag.src = flagSrc;
+                    currentLangFlag.style.display = 'inline-block';
+                }
+                if (currentLangName) currentLangName.textContent = langName;
+            }
         }
     });
-
-    nextBtn.addEventListener("click", () => {
-        if (currentPage < totalPages) {
-            currentPage++;
-            updatePage();
-        }
-    });
-
-    updatePage();
-});
 </script>
-
-<script>
-$(document).ready(function() {
-    $('.fancybox-icon-title').on('click', function() {
-        $(this).siblings('.fancybox-body').find('.fancybox-desc-wrapper').slideToggle();
-    });
-});
-</script>
-
-<script type="text/javascript">
-$(document).ready(function() {
-    // Delay scroll to #page-content for 10 seconds
-    setTimeout(function() {
-        const $target = $('#page-content'); // Replace with your actual About Us section ID
-
-        if ($target.length) {
-            $('html, body').animate({
-                scrollTop: $target.offset().top
-            }, 1000); // Duration in ms (1 second)
-        }
-    }, 2000); // Delay in ms (5 seconds)
-});
-</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

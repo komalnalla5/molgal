@@ -2,6 +2,8 @@
     include_once('helper.php');
     include_once('config.php');
     $getBroucher = getBroucher($conn);
+    $languages = include __DIR__ . '/languages.php';
+
 ?>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
@@ -42,11 +44,9 @@ $siteResult = mysqli_stmt_get_result($siteStmt);
 $headerSite = mysqli_fetch_assoc($siteResult);
 mysqli_stmt_close($siteStmt);
 
-
 if (!$headerSite) {
     die('Site not found or inactive.');
 }
-
 $brandSuper        = getBrandSuperscript($subName);
 $superScript       = $brandSuper['symbol'];
 $superScriptClass  = $brandSuper['class'];
@@ -59,21 +59,16 @@ $superScriptClass  = $brandSuper['class'];
             aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse me-lg-3" id="navbarContent">
             <marquee>
                 <p class="top-navbar">
                    <span class="site-name">
-                                 <?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?><?php if ($subName !== ''): ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($subName, ENT_QUOTES, 'UTF-8'); ?> </sup><?php echo htmlspecialchars($headerSite['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
-                                   
-                                    <?php endif; ?>
-                                    
-                            </span>
+                        <?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?><?php if ($subName !== ''): ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($subName, ENT_QUOTES, 'UTF-8'); ?> </sup><?php echo htmlspecialchars($headerSite['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                        <?php endif; ?>
+                    </span>
                 </p>
             </marquee>
-            
         </div>
-
         <!-- RIGHT LOGO -->
         <a class="navbar-brand ms-5" style="justify-content: center;" href="index.php">
             <img src="assets/img/muby-chem-white.png" alt="Mubychem Logo" style="width:200px;" loading="lazy">
@@ -82,7 +77,6 @@ $superScriptClass  = $brandSuper['class'];
 </nav>
 <header class="rv-28-header">
     <div class="rv-28-border-for-menu to-be-fixed">
-        <!--  -->
         <div class="container">
             <div class="row">
                 <div class="rv-28-menu">
@@ -115,19 +109,37 @@ $superScriptClass  = $brandSuper['class'];
                                 <li><a href="contact.php">Contact us</a></li>
                             </ul>
                         </div>
-                        <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn res-menu-btn" target="_blank" rel="noopener noreferrer">Download Brochure
+                        <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn res-menu-btn" target="_blank" rel="noopener noreferrer">Brochure
                             <i class="fa fa-angle-right"></i>
                         </a>
                     </div>
-                   <div class="rv-28-menu-BookNow">
-                          <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn" target="_blank" rel="noopener noreferrer">Download Brochure
+                    <div class="rv-28-menu-BookNow">
+                        <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn" target="_blank" rel="noopener noreferrer"> Brochure
                             <i class="fa fa-angle-right"></i>
                         </a>
+                       
                         <button class="rv-3-def-btn rv-1-header-mobile-menu-btn d-lg-none d-inline-block"
                             id="rv-1-header-mobile-menu-btn" aria-label="Open menu">
                             <i class="fa fa-bars" aria-hidden="true"></i>
                         </button>
                     </div>
+                    <!-- Custom Language Switcher (moved outside) -->
+                        <div class="lang-switcher dropdown header1-language">
+                            <button class="lang-btn dropdown-toggle" type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://flagcdn.com/w20/gb.png" alt="" class="lang-flag" id="currentLangFlag" style="display:none;">
+                                <span id="currentLangName">Select Language</span>
+                            </button>
+                            <ul class="dropdown-menu lang-dropdown-menu" aria-labelledby="langDropdownBtn">
+                                <?php foreach ($languages as $code => $lang): ?>
+                                    <li>
+                                        <a class="dropdown-item lang-option" href="#" data-lang="<?php echo htmlspecialchars($code); ?>" data-name="<?php echo htmlspecialchars($lang['name']); ?>">
+                                            <img src="https://flagcdn.com/w20/<?php echo htmlspecialchars($lang['flag']); ?>.png" alt="<?php echo htmlspecialchars($lang['name']); ?>" class="lang-flag">
+                                            <?php echo htmlspecialchars($lang['name']); ?>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
                 </div>
             </div>
         </div>
