@@ -3573,9 +3573,6 @@ li {
     position: relative !important;
     top: -0.6em !important;
 }
-
-/* sir */
-
 /* bala sir */
  .enquiry-honeypot {
         position: absolute !important;
@@ -3601,3 +3598,59 @@ li {
         background: #f8d7da;
         border-color: #f1aeb5;
     }
+
+/* Languge */
+.dropdown-menu.lang-dropdown-menu .dropdown-item.lang-option:hover,
+.dropdown-menu.lang-dropdown-menu .dropdown-item.lang-option:focus,
+.dropdown-menu.lang-dropdown-menu .dropdown-item.lang-option.active {
+    color: #0d6efd !important;
+    background-color: #f4f5f7 !important;
+}
+
+/* hide google bnner */
+.skiptranslate {
+    display: none !important;
+}
+
+iframe.skiptranslate {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+}
+
+body {
+    top: 0px !important;
+    position: static !important;
+}
+
+.lang-switcher{
+    margin-right: -32px;
+    margin-left: 13px;
+}
+.lang-btn{
+    color: white;
+    font-size: 14.5px;
+    background-color: #843f38;
+    border-radius: 10px;
+    border: 1px solid #843f38 !important;
+}
+/* languge scrollbar */
+.dropdown-menu.lang-dropdown-menu {
+    max-height: 320px !important;
+    overflow-y: auto !important;
+}
+
+.dropdown-menu.lang-dropdown-menu::-webkit-scrollbar {
+    width: 6px !important;
+}
+
+.dropdown-menu.lang-dropdown-menu::-webkit-scrollbar-thumb {
+    background-color: #9e9e9e !important;
+    border-radius: 10px !important;
+}
+
+.dropdown-menu.lang-dropdown-menu::-webkit-scrollbar-track {
+    background: transparent !important;
+    border-radius: 10px !important;
+}
+/* Languge End */

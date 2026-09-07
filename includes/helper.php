@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../config.php';
+$languages = include __DIR__ . '/languages.php';
 
 function getCurrentSite($conn)
 {

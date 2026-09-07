@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'en'    => ['name' => 'English',            'flag' => 'gb'],
+    'zh-CN' => ['name' => 'Chinese (Simplified)','flag' => 'cn'],
+    'zh-TW' => ['name' => 'Chinese (Traditional)','flag' => 'tw'],
+    'ko'    => ['name' => 'Korean',              'flag' => 'kr'],
+    'ar'    => ['name' => 'Arabic',              'flag' => 'sa'],
+    'ru'    => ['name' => 'Russian',             'flag' => 'ru'],
+    'fr'    => ['name' => 'French',              'flag' => 'fr'],
+    'de'    => ['name' => 'German',              'flag' => 'de'],
+    'es'    => ['name' => 'Spanish',             'flag' => 'es'],
+    'it'    => ['name' => 'Italian',             'flag' => 'it'],
+    'pt'    => ['name' => 'Portuguese',          'flag' => 'pt'],
+    'ja'    => ['name' => 'Japanese',            'flag' => 'jp'],
+    'hi'    => ['name' => 'Hindi',               'flag' => 'in'],
+    'bn'    => ['name' => 'Bengali',             'flag' => 'bd'],
+    'tr'    => ['name' => 'Turkish',             'flag' => 'tr'],
+    'vi'    => ['name' => 'Vietnamese',          'flag' => 'vn'],
+    'th'    => ['name' => 'Thai',                'flag' => 'th'],
+    'id'    => ['name' => 'Indonesian',          'flag' => 'id'],
+    'nl'    => ['name' => 'Dutch',               'flag' => 'nl'],
+    'pl'    => ['name' => 'Polish',              'flag' => 'pl'],
+    'uk'    => ['name' => 'Ukrainian',           'flag' => 'ua'],
+    'fa'    => ['name' => 'Persian',             'flag' => 'ir'],
+    'he'    => ['name' => 'Hebrew',              'flag' => 'il'],
+    'sw'    => ['name' => 'Swahili',             'flag' => 'ke'],
+];
