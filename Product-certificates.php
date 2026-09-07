@@ -6,6 +6,7 @@ require_once __DIR__ . '/includes/helper.php';
 // Fetch all active certificates for this site
 $certificates = getCertificate($conn,'product');
 ?>
+<?php if (!empty($certificates)): ?>
 <div class="det-wrapper mb-3">
     <div class="spec-table-det-container">
         <h3>ACCREDITATIONS</h3>
@@ -26,3 +27,4 @@ $certificates = getCertificate($conn,'product');
         </div>
     </div>
 </div>
+<?php endif; ?>

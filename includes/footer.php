@@ -27,6 +27,7 @@ mysqli_stmt_close($siteStmt);
 if (!$headerSite) {
     die('Site not found or inactive.');
 }
+$certificates = $certificates ?? [];
 ?>
 <footer>
     <div class="footer-sec">
@@ -136,11 +137,12 @@ if (!$headerSite) {
 </script>
 <!-- Include Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+<?php $certCount = count($certificates); ?>
 <script>
 var swiper = new Swiper(".productSlider", {
     slidesPerView: 5,
     spaceBetween: 30,
-    loop: true,
+    loop: <?php echo $certCount > 6 ? 'true' : 'false'; ?>,
     navigation: {
         nextEl: ".swiper-button-next",
         prevEl: ".swiper-button-prev"

@@ -40,9 +40,6 @@ mysqli_stmt_bind_param($siteStmt, 'i', $siteIdParam);
 mysqli_stmt_execute($siteStmt);
 $siteResult = mysqli_stmt_get_result($siteStmt);
 $headerSite = mysqli_fetch_assoc($siteResult);
-// echo "<pre>";
-// print_r($headerSite);
-// die;
 mysqli_stmt_close($siteStmt);
 
 
