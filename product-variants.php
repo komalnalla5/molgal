@@ -46,6 +46,9 @@
     }
 
     $allVariants = array_merge([$parent], $children);
+     $brandSuper        = getBrandSuperscript($currentSite['sub_name']);
+    $superScript       = $brandSuper['symbol'];
+    $superScriptClass  = $brandSuper['class'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,7 +78,7 @@
     </style>
     <section class="product-section">
         <div class="">
-            <h2 class="subcate-title"><?php echo htmlspecialchars($currentSite['name']); ?><sup class="tm-mark-hero-product"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> Range of products</h2>
+            <h2 class="subcate-title"><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($superScript); ?></sup> Range of products</h2>
         </div>
     </section>
 
@@ -95,7 +98,7 @@
                             alt="<?php echo htmlspecialchars($p['product_alt_text'] ?: $p['product_name']); ?>"
                             class="product-image"
                             loading="lazy" />
-                        <h2 class="product-title"><?php echo htmlspecialchars($currentSite['name']); ?><sup class="tm-mark-hero-product"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo htmlspecialchars($p['product_code']); ?></h2>
+                        <h2 class="product-title"><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo htmlspecialchars($p['product_code']); ?></h2>
                         <div class="product-subtitle"><?php echo htmlspecialchars($p['product_name']); ?></div>
                         <div class="product-description">(<?php echo htmlspecialchars($p['usage_tag']); ?>)</div>
                     </a>
