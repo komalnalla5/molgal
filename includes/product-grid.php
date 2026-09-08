@@ -37,7 +37,7 @@ mysqli_stmt_close($productsStmt);
                         alt="<?php echo htmlspecialchars($p['product_alt_text'] ?: $p['product_name']); ?>"
                         class="product-image"
                         loading="lazy" />
-                    <h2 class="product-title"><?php echo htmlspecialchars($site['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($site['sub_name']); ?></sup> <?php echo htmlspecialchars($p['product_code']); ?></h2>
+                    <h2 class="product-title" translate="no" class="notranslate"><?php echo htmlspecialchars($site['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($site['sub_name']); ?></sup> <?php echo htmlspecialchars($p['product_code']); ?></h2>
                     <div class="product-subtitle"><?php echo htmlspecialchars($p['product_name']); ?></div>
                     <div class="product-description">(<?php echo htmlspecialchars($p['usage_tag']); ?>)</div>
                 </a>

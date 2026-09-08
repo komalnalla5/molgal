@@ -30,6 +30,7 @@ try {
     );
 }
 $siteName = isset($site['name']) ? $site['name'] : '';
+$brandName = isset($site['site_name']) ? $site['site_name'] : '';
 $subName  = isset($site['sub_name']) ? trim($site['sub_name']) : '';
 
 $metaTitle = !empty($site['meta_title'])
@@ -99,7 +100,7 @@ $enquirySettings = [
     'name_required'       => 1,
     'email_placeholder'   => 'Email',
     'email_required'      => 1,
-    'product_placeholder' => ($siteName !== '' ? $siteName : 'Select') . ' Products',
+    'product_placeholder' => ($brandName !== '' ? $brandName : 'Select') . ' Products',
     'product_required'    => 1,
     'submit_button_text'  => 'Enquire Now',
     'notify_email'        => 'ask@mubychem.com',
@@ -258,7 +259,7 @@ $showEnquiryForm =
                         </h1>
 
                         <div id="page-content" class="banner-title__text">
-                            <span class="site-name">
+                            <span class="site-name" translate="no" class="notranslate">
                                  <?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?><?php if ($subName !== ''): ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($subName, ENT_QUOTES, 'UTF-8'); ?>
                                     </sup>
                                 <?php endif; ?>

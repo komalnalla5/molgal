@@ -39,7 +39,7 @@
         alt="title image"
         loading="lazy">
         <div class="hero-content">
-           <h1><?php echo htmlspecialchars($site['name'], ENT_QUOTES, 'UTF-8'); ?><?php if ($site['sub_name'] !== ''): ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($site['sub_name'], ENT_QUOTES,'UTF-8'); ?></sup><?php endif; ?></h1>
+           <h1 translate="no" class="notranslate"><?php echo htmlspecialchars($site['name'], ENT_QUOTES, 'UTF-8'); ?><?php if ($site['sub_name'] !== ''): ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($site['sub_name'], ENT_QUOTES,'UTF-8'); ?></sup><?php endif; ?></h1>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.php"><i class="fa-solid fa fa-home"> </i> Home</a></li>
