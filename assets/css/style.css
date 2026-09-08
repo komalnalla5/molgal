@@ -114,7 +114,7 @@ ul {
 }
 
 .product-title {
-    margin-top: 5px;
+    margin-top: 7px;
     font-size: 22px;
     color: #7B3931;
     font-weight: 700;
@@ -3548,7 +3548,7 @@ li {
 }
 
 .brand-sup-r {
-    font-size: 0.7.5em !important;
+    font-size: 0.95em !important;
     vertical-align: super !important;
     line-height: 0 !important;
     position: relative !important;
@@ -3558,7 +3558,7 @@ li {
 /* Bigger for the hero heading, but with a smaller "top" magnitude
    since top is relative to this element's own (now larger) font-size */
 .a-banner-title__text .brand-sup-r {
-    font-size: 0.7em !important;
+    font-size: 0.75em !important;
     vertical-align: baseline !important;
     top: -0.55em !important;
 }

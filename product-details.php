@@ -174,6 +174,10 @@ mysqli_stmt_execute($propStmt);
 $propResult = mysqli_stmt_get_result($propStmt);
 $typicalProperties = [];
 while ($row = mysqli_fetch_assoc($propResult)) {
+     // Skip rows that have no value at all
+    if (trim((string) $row['typical_value']) === '') {
+        continue;
+    }
        $propertyName = ucwords(
         strtolower(trim($row['properties']))
         );
@@ -236,7 +240,7 @@ $superScriptClass  = $brandSuper['class'];
         <div class="det-container">
             <!-- product hero section left content -->
             <div class="left-box product-left-content">
-                <h1><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo renderProductFormulaText($product['product_code']); ?></h1>
+                <h1 translate="no" class="notranslate"><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo renderProductFormulaText($product['product_code']); ?></h1>
                 <h2><?php echo renderProductFormulaText($product['product_name']); ?></h2>
                 <p>(<?php echo renderProductFormulaText($product['usage_tag']); ?>)</p>
             </div>
@@ -252,7 +256,7 @@ $superScriptClass  = $brandSuper['class'];
                 <?php
                     $imgDesc = preg_replace('/^\s*<p[^>]*>|<\/p>\s*$/i', '', trim($product['img_description']));
                 ?>
-                <strong><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']);?></sup> <?php echo renderProductFormulaText($product['product_code']); ?></strong> <?php echo renderProductFormulaHtml($imgDesc); ?> 
+                <strong translate="no" class="notranslate"><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']);?></sup> <?php echo renderProductFormulaText($product['product_code']); ?></strong> <?php echo renderProductFormulaHtml($imgDesc); ?> 
             </div>
         <?php endif; ?>
     </div>
@@ -263,7 +267,7 @@ $superScriptClass  = $brandSuper['class'];
         <div class="card">
             <div class="det-content">
                 <div class="left">
-                    <h2 class="product-left-title">
+                    <h2 class="product-left-title" translate="no" class="notranslate">
                         <?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo renderProductFormulaText($product['product_code']); ?>
                     </h2>
                     <?php if (!empty($product['intro_by'])): ?>
@@ -298,7 +302,6 @@ $superScriptClass  = $brandSuper['class'];
         </div>
       </div>
 
-      <!-- property formula section -->
     <!-- property formula section -->
     <?php if ($hasTypicalProps): ?>
     <div class="det-wrapper">
