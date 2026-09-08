@@ -2,14 +2,6 @@
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/includes/helper.php';
 
-
-/*
-|--------------------------------------------------------------------------
-| Chemical formula display helpers
-|--------------------------------------------------------------------------
-| Store product content as plain text/HTML. These helpers add <sub> only
-| while rendering, without changing percentages, CAS numbers or standards.
-*/
 if (!function_exists('formatProductFormulaTokens')) {
     function formatProductFormulaTokens($text)
     {
@@ -110,6 +102,7 @@ if (!function_exists('formatProductFormulaTokens')) {
 
     function renderProductFormulaHtml($html)
     {
+        $html = stripEmptyParagraphs($html);
         $parts = preg_split(
             '/(<[^>]+>)/u',
             (string) $html,
@@ -125,11 +118,24 @@ if (!function_exists('formatProductFormulaTokens')) {
             if ($part === '' || $part[0] === '<') {
                 continue;
             }
-
             $parts[$index] = formatProductFormulaTokens($part);
         }
-
         return implode('', $parts);
+    }
+}
+
+if (!function_exists('stripEmptyParagraphs')) {
+    function stripEmptyParagraphs($html)
+    {
+        return preg_replace('/<p[^>]*>(\s|&nbsp;|<br\s*\/?>)*<\/p>/i', '', (string) $html);
+    }
+}
+
+if (!function_exists('renderRichContentHtml')) {
+    function renderRichContentHtml($html)
+    {
+        $html = preg_replace('/<p[^>]*>(\s|&nbsp;|<br\s*\/?>)*<\/p>/i', '<br>', (string) $html);
+        return renderProductFormulaHtml($html);
     }
 }
 
@@ -276,7 +282,9 @@ $superScriptClass  = $brandSuper['class'];
                 <div class="right">
                     <h2><?php echo renderProductFormulaText($product['product_name']); ?></h2>
                     <?php if (!empty($product['intro_text'])): ?>
-                        <?php echo renderProductFormulaHtml($product['intro_text']); ?>
+                        <div class="rich-content">
+                           <?php echo renderRichContentHtml($product['intro_text']); ?>
+                        </div>
                     <?php endif; ?>
                     <div class="buttons">
                         <a href="contact.php"><button class="enquiry">Enquiry</button></a>
@@ -340,7 +348,9 @@ $superScriptClass  = $brandSuper['class'];
     <?php if (!empty($product['package_description'])): ?>
     <div class="det-wrapper">
         <div class="spec-table-det-container">
-            <?php echo renderProductFormulaHtml($product['package_description']); ?>
+            <div class="rich-content">
+               <?php echo renderRichContentHtml($product['package_description']); ?>
+            </div>
         </div>
     </div>
     <?php endif; ?>
