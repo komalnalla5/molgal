@@ -3563,6 +3563,18 @@ li {
     top: -0.55em !important;
 }
 
+.product2-title .brand-sup-r {
+    font-size: 0.75em !important;
+    vertical-align: baseline !important;
+    top: -0.55em !important;
+}
+
+.subcate-title .brand-sup-r {
+    font-size: 0.75em !important;
+    vertical-align: baseline !important;
+    top: -0.55em !important;
+}
+
 .a-banner-title__text .brand-sup-tm {
     font-size: 0.7em !important;
     vertical-align: baseline !important;
