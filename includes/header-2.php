@@ -37,7 +37,8 @@ if (!$headerSite) {
  <link rel="stylesheet" href="assets/css/style.css">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
- <link rel="shortcut icon" href="assets/img/fevicon.png" alt="title image" type="image/x-icon" loading="lazy">
+<link rel="icon" type="image/x-icon" href="<?php echo ADMIN_BASE_URL; ?>assets/images/fevicon.png">
+
  </head>
  
  <header class="rv-1-header rv-inner-header to-be-fixed">
