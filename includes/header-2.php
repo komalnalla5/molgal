@@ -1,7 +1,7 @@
  <?php
     include_once('helper.php');
     include_once('config.php');
-    $getBroucher = getBroucher($conn);
+    $getBroucher = getBroucher($conn); 
     $languages = include __DIR__ . '/languages.php';
 
     $siteStmt = mysqli_prepare($conn, "SELECT 
@@ -91,8 +91,8 @@ if (!$headerSite) {
 
              <div class="col-lg-3 col-8 col-xxs-6 text-end order-1 order-lg-2">
                  <div class="d-flex justify-content-end">
+                  <?php if (!empty($getBroucher) && $getBroucher['status'] == "active"): ?>
                      <div class="rv-inner-header-right-btns">
-                        <!-- <a href="login.html"><i class="fa fa-user"></i>Login</a> -->
                         <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -100,6 +100,7 @@ if (!$headerSite) {
                                 Brochure 
                         </a>
                      </div>
+                    <?php endif; ?>
                         <!-- Custom Language Switcher (moved outside) -->
                         <div class="lang-switcher dropdown">
                             <button class="lang-btn dropdown-toggle" type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">

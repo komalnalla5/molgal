@@ -3692,11 +3692,19 @@ body {
     border-radius: 10px !important;
 }
 /* Languge End */
-.right .rich-content p {
+
+/* Description spacing issue fix */
+.rich-content p,
+.rich-content h1,
+.rich-content h2,
+.rich-content h3,
+.rich-content h4,
+.rich-content h5,
+.rich-content h6 {
     margin: 0 !important;
     padding: 0 !important;
 }
-.spec-table-det-container .rich-content p {
-    margin: 0 !important;
-    padding: 0 !important;
+.rich-content .rc-gap {
+    margin-top: 12px !important;
 }
+/* End description spacing*/

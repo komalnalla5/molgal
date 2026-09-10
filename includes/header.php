@@ -109,15 +109,18 @@ $superScriptClass  = $brandSuper['class'];
                                 <li><a href="contact.php">Contact us</a></li>
                             </ul>
                         </div>
-                        <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn res-menu-btn" target="_blank" rel="noopener noreferrer">Brochure
-                            <i class="fa fa-angle-right"></i>
-                        </a>
+                        <?php if (!empty($getBroucher) && $getBroucher['status'] == "active"): ?>
+                            <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn res-menu-btn" target="_blank" rel="noopener noreferrer">Brochure
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <?php endif; ?>
                     </div>
                     <div class="rv-28-menu-BookNow">
-                        <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn" target="_blank" rel="noopener noreferrer"> Brochure
-                            <i class="fa fa-angle-right"></i>
-                        </a>
-                       
+                        <?php if (!empty($getBroucher) && $getBroucher['status'] == "active"): ?>
+                            <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn" target="_blank" rel="noopener noreferrer"> Brochure
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <?php endif; ?>
                         <button class="rv-3-def-btn rv-1-header-mobile-menu-btn d-lg-none d-inline-block"
                             id="rv-1-header-mobile-menu-btn" aria-label="Open menu">
                             <i class="fa fa-bars" aria-hidden="true"></i>

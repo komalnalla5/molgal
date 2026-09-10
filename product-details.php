@@ -131,10 +131,35 @@ if (!function_exists('stripEmptyParagraphs')) {
     }
 }
 
+// fixed description spacing issue
 if (!function_exists('renderRichContentHtml')) {
     function renderRichContentHtml($html)
     {
-        $html = preg_replace('/<p[^>]*>(\s|&nbsp;|<br\s*\/?>)*<\/p>/i', '<br>', (string) $html);
+        $pendingGap = false;
+        $html = preg_replace_callback(
+            '/<(p|h[1-6])\b([^>]*)>(.*?)<\/\1>/is',
+            function ($m) use (&$pendingGap) {
+                $tag   = $m[1];
+                $attrs = $m[2];
+                $inner = $m[3];
+                $text = strip_tags($inner);
+                $text = str_replace(["&nbsp;", "\xC2\xA0", "\xEF\xBB\xBF"], ' ', $text);
+                $text = trim($text);
+
+                if ($text === '') {
+                    $pendingGap = true;
+                    return '';
+                }
+
+                if ($pendingGap) {
+                    $attrs .= ' class="rc-gap"';
+                    $pendingGap = false;
+                }
+
+                return '<' . $tag . $attrs . '>' . $inner . '</' . $tag . '>';
+            },
+            (string) $html
+        );
         return renderProductFormulaHtml($html);
     }
 }
