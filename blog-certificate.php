@@ -1,6 +1,5 @@
 <?php
 include('config.php');
-include('includes/helper.php');
 // Fetch all active certificates for this site
 $certificates = getCertificate($conn,'blog');
 $certificates = array_slice($certificates, 0, 10);

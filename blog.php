@@ -283,39 +283,7 @@ foreach (getCertificate($conn, 'blog') as $certificate) {
          <?php endif; ?>
       </div>
 
-      <div class="blog-sidebar">
-         <div class="cert-widget">
-            <div class="cert-header">
-               <div style="font-size:1.3rem;">&#127942;</div>
-               <div>
-                  <h3>Certificates</h3>
-                  <small>Added from Admin</small>
-               </div>
-            </div>
-            <div class="cert-grid">
-               <?php if (!empty($certifications)): foreach ($certifications as $c): ?>
-                  <div class="cert-cell">
-                     <img src="<?php echo htmlspecialchars($c['img']); ?>" alt="<?php echo htmlspecialchars($c['label']); ?>" loading="lazy" onerror="this.style.display='none'">
-                     <span><?php echo htmlspecialchars($c['label']); ?></span>
-                  </div>
-               <?php endforeach; else: ?>
-                  <p class="text-muted small mb-0">No certificates added yet.</p>
-               <?php endif; ?>
-            </div>
-         </div>
-
-         <div class="audit-box">
-            <div class="ico">&#128737;</div>
-            <div>
-               <h3><?php echo htmlspecialchars($audit_title); ?></h3>
-               <p><?php echo htmlspecialchars($audit_description); ?></p>
-            </div>
-            <svg class="hex-corner" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
-               <path d="M17 0 L53 0 L70 30 L53 60 L17 60 L0 30 Z" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="1.5"/>
-               <path d="M27 15 L43 15 L51 30 L43 45 L27 45 L19 30 Z" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="1.5"/>
-            </svg>
-         </div>
-      </div>
+      <?php include('blog-certificate.php'); ?>
    </div>
 
    <?php include('includes/footer.php'); ?>

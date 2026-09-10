@@ -250,7 +250,7 @@ $superScriptClass  = $brandSuper['class'];
                 <?php
                     $imgDesc = preg_replace('/^\s*<p[^>]*>|<\/p>\s*$/i', '', trim($product['img_description']));
                 ?>
-                <strong translate="no" class="notranslate"><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']);?></sup> <?php echo renderProductFormulaText($product['product_code']); ?></strong> <?php echo renderProductFormulaHtml($imgDesc); ?> 
+                <strong translate="no" class="notranslate img-description"><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']);?></sup> <?php echo renderProductFormulaText($product['product_code']); ?></strong> <?php echo renderProductFormulaHtml($imgDesc); ?> 
             </div>
         <?php endif; ?>
     </div>

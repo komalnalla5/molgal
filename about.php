@@ -18,6 +18,9 @@ mysqli_stmt_bind_param($stmt, 'i', $siteId);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 $aboutUs = mysqli_fetch_assoc($result);
+// echo "<pre>";
+// echo '<pre>' . htmlspecialchars(print_r($aboutUs, true)) . '</pre>';
+// die();
 
 mysqli_stmt_close($stmt);
 
@@ -34,6 +37,35 @@ if ($aboutUs) {
         $aboutSections[] = $row;
     }
     mysqli_stmt_close($stmt2);
+}
+
+if (!function_exists('renderRichContentHtml')) {
+    function renderRichContentHtml($html)
+    {
+        $pendingGap = false;
+        $html = preg_replace_callback(
+            '/<(p|h[1-6])\b([^>]*)>(.*?)<\/\1>/is',
+            function ($m) use (&$pendingGap) {
+                $tag   = $m[1];
+                $attrs = $m[2];
+                $inner = $m[3];
+                $text = strip_tags($inner);
+                $text = str_replace(["&nbsp;", "\xC2\xA0", "\xEF\xBB\xBF"], ' ', $text);
+                $text = trim($text);
+                if ($text === '') {
+                    $pendingGap = true;
+                    return '';
+                }
+                if ($pendingGap) {
+                    $attrs .= ' class="rc-gap"';
+                    $pendingGap = false;
+                }
+                return '<' . $tag . $attrs . '>' . $inner . '</' . $tag . '>';
+            },
+            (string) $html
+        );
+         return $html;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -78,10 +110,12 @@ if ($aboutUs) {
         <div class="about-content">
             <?php if ($aboutUs): ?>
                  <h2><?php echo $aboutUs['title']; ?></h2>
-               <p><?php echo $aboutUs['about_us_description']; // stored as HTML/rich text ?></p> 
+               <?php echo renderRichContentHtml($aboutUs['about_us_description']); // stored as HTML/rich text ?>
             <?php else: ?>
                 <h2>MUBY CHEM PRIVATE LIMITED</h2>
-                <p>Muby Chem Pvt. Ltd. was established in 1976...</p>
+                <p>Muby Chem Pvt. Ltd. was established in 1976 and has grown into a reputable, customer-focused manufacturer of high-purity pharmaceutical components, mineral salts, excipients and specialty chemicals. We serve industries globally including pharma, food & beverages, cosmetics and more.<br><br>
+                Our production capabilities cover grades like IP, BP, USP, Ph. Eur., JP, CP, FCC, Analytical Reagent, LR, Pure and Technical—all tested to meet international standards.<br><br>
+                With over 400 products in our portfolio, we ensure accuracy, compliance and service to a wide range of sectors.</p>
             <?php endif; ?>
         </div>
     </section>
@@ -100,7 +134,7 @@ if ($aboutUs) {
                         <h2><?php echo htmlspecialchars($section['title']); ?></h2>
                     <?php endif; ?>
                     <?php if (!empty($section['description'])): ?>
-                        <?php echo $section['description']; ?>
+                        <?php echo renderRichContentHtml($section['description']); ?>
                     <?php endif; ?>
                 </div>
             <?php endforeach; ?>
