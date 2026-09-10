@@ -102,6 +102,7 @@ foreach (getCertificate($conn, 'blog') as $certificate) {
         'img' => getCertificateImageUrl($certificate['cert_img'])
     ];
 }
+$certifications = array_slice($certifications, 0, 12);
 
 $auditRes = mysqli_prepare($conn, "SELECT audit_title, audit_description FROM blog_page_settings WHERE site_id = ?");
 mysqli_stmt_bind_param($auditRes, "i", $site_id);
@@ -338,7 +339,46 @@ $audit_description = !empty($auditRow['audit_description']) ? $auditRow['audit_d
          <?php endif; ?>
       </div>
 
-     <?php include('blog-detail-certificate.php') ?>
+ <div class="blog-sidebar">
+         <div class="cert-widget">
+            <div class="cert-header"><h3>Certificates</h3><small>Added from Admin</small></div>
+            <div class="cert-grid">
+               <?php if (!empty($certifications)): foreach ($certifications as $c): ?>
+                  <div class="cert-cell">
+                     <img src="<?php echo htmlspecialchars($c['img']); ?>" alt="<?php echo htmlspecialchars($c['label']); ?>" loading="lazy" onerror="this.style.display='none'">
+                     <span><?php echo htmlspecialchars($c['label']); ?></span>
+                  </div>
+               <?php endforeach; else: ?>
+                  <p class="text-muted small mb-0">No certificates added yet.</p>
+               <?php endif; ?>
+            </div>
+         </div>
+
+         <div class="audit-box">
+            <div class="ico">&#128737;</div>
+            <div>
+               <h3><?php echo htmlspecialchars($audit_title); ?></h3>
+               <p><?php echo htmlspecialchars($audit_description); ?></p>
+            </div>
+         </div>
+
+         <?php if (!empty($recent)): ?>
+         <div class="widget">
+            <h3 style="color:var(--brand-dark); font-size:.95rem; margin-bottom:14px; font-weight:600;">Recent Blogs</h3>
+            <?php foreach ($recent as $r): ?>
+               <a href="blog-detail.php?slug=<?php echo urlencode($r['slug']); ?>" class="recent-item">
+                  <img src="<?php echo htmlspecialchars(blog_image($r)); ?>" alt="<?php echo htmlspecialchars($r['title']); ?>">
+                  <div>
+                     <?php if (!empty($r['category'])): ?><span class="cat-tag"><?php echo htmlspecialchars($r['category']); ?></span><?php endif; ?>
+                     <h4><?php echo htmlspecialchars($r['title']); ?></h4>
+                     <span><?php echo date('M d, Y', strtotime($r['created_at'])); ?> &middot; <?php echo read_time($r['content']); ?> min read</span>
+                  </div>
+               </a>
+            <?php endforeach; ?>
+            <div class="view-all"><a href="blog.php">View all blogs &#8594;</a></div>
+         </div>
+         <?php endif; ?>
+      </div>
    </div>
 
    <?php include('includes/footer.php'); ?>
