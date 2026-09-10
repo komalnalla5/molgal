@@ -59,16 +59,21 @@ $superScriptClass  = $brandSuper['class'];
             aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse me-lg-3" id="navbarContent">
-            <marquee>
-                <p class="top-navbar">
-                   <span class="site-name">
-                        <?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?><?php if ($subName !== ''): ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($subName, ENT_QUOTES, 'UTF-8'); ?> </sup><?php echo htmlspecialchars($headerSite['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
-                        <?php endif; ?>
-                    </span>
-                </p>
-            </marquee>
-        </div>
+       <div class="collapse navbar-collapse me-lg-3" id="navbarContent">
+    <marquee>
+        <p class="top-navbar">
+            <span class="site-name">
+                <?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?>
+                <?php if ($subName !== ''): ?>
+                    <sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>">
+                        <?php echo htmlspecialchars($subName, ENT_QUOTES, 'UTF-8'); ?>
+                    </sup>
+                    <?php echo htmlspecialchars($headerSite['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                <?php endif; ?>
+            </span>
+        </p>
+    </marquee>
+</div>
         <!-- RIGHT LOGO -->
         <a class="navbar-brand ms-5" style="justify-content: center;" href="index.php">
             <img src="assets/img/muby-chem-white.png" alt="Mubychem Logo" style="width:200px;" loading="lazy">

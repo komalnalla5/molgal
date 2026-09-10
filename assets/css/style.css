@@ -114,7 +114,7 @@ ul {
 }
 
 .product-title {
-    margin-top: 7px;
+    margin-top: 10px;
     font-size: 22px;
     color: #7B3931;
     font-weight: 700;
@@ -1787,7 +1787,7 @@ banner-subtitle-text {
     font-size: 16px;
     color: #444;
     line-height: 1.6;
-    margin-bottom: 0 !important;
+    margin-bottom: 14px !important;
 }
 
 @media (max-width: 1024px) {
@@ -3575,6 +3575,12 @@ li {
     top: -0.55em !important;
 }
 
+.img-description .brand-sup-r {
+    font-size: 1.2em !important;
+    vertical-align: baseline !important;
+    top: -0.33em !important;
+}
+
 .a-banner-title__text .brand-sup-tm {
     font-size: 0.7em !important;
     vertical-align: baseline !important;
@@ -3692,8 +3698,15 @@ body {
     border-radius: 10px !important;
 }
 /* Languge End */
+/* header marque tag */
+.top-navbar {
+    margin: 0;
+    padding: 8px 0 10px;
+    line-height: 1.5;
+    overflow: visible;
+}
 
-/* Description spacing issue fix */
+/* manage spacing for aboutus description */
 .rich-content p,
 .rich-content h1,
 .rich-content h2,
