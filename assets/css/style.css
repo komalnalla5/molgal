@@ -218,11 +218,16 @@ ul {
 .about_us_box {
     flex: 1 1 300px;
     max-width: 280px;
+    height: 450px;
     border: 3px solid #333;
     border-radius: 30px;
-    padding: 15px 15px;
+    padding: 15px 15px 25px;   /* extra padding at bottom */
     text-align: center;
     background: #fff;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;           /* box itself stays clean-edged */
 }
 
 .about_us_box .about_us_icon {
@@ -237,17 +242,49 @@ ul {
     object-fit: cover;
     border-radius: 40px;
 }
-
 .about_us_box h2 {
     font-weight: 800;
     font-size: 36px;
+    line-height: 1.2;
     margin-bottom: 5px;
+    overflow-wrap: anywhere;
+    flex: 0 0 auto;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
 }
 
-.about_us_box p {
+/* NEW: single scroll wrapper for all body content */
+.about_us_box .about_us_body {
+    flex: 1 1 auto;
+    min-height: 0;      /* critical for overflow to work in flexbox */
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+    padding-right: 4px; /* small gap so text doesn't sit under the scrollbar */
+}
+
+.about_us_box .about_us_body::-webkit-scrollbar { width: 2px; }
+.about_us_box .about_us_body::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 5px;
+}
+.about_us_box .about_us_body::-webkit-scrollbar-track { background: transparent; }
+
+/* ul/p/li no longer need their own flex or overflow rules */
+.about_us_box ul {
+    margin: 0;
+    padding-left: 18px;
+    text-align: left;
+}
+
+.about_us_box p,
+.about_us_box li {
     font-size: 16px;
     line-height: 1.6;
     color: #333;
+    margin: 0;
+    padding-bottom: 10px;
 }
 
 /* Rotating border colors to match Mission/Vision/Value style */
@@ -259,8 +296,39 @@ ul {
     .about-sec-container {
         flex-direction: column;
         align-items: center;
+        gap: 20px;
+        padding: 0 16px; 
+        margin-top:20px;  /* small side breathing room instead of huge gutters */
+    }
+
+    .about_us_box {
+        flex: none;
+        width: 100%;
+        max-width: 420px;   /* comfortable reading width, not full bleed */
+        height: 420px;      /* slightly shorter than desktop, still fixed so scroll works */
+    }
+
+    .about_us_box .about_us_icon {
+        width: 110px;
+        height: 110px;
+    }
+
+    .about_us_box h2 {
+        font-size: 28px;
+    }
+
+    .about_us_box .about_us_body {
+        font-size: 15px;
     }
 }
+
+@media (max-width: 420px) {
+    .about_us_box {
+        max-width: 100%;   /* let it fill the screen on very small phones */
+        height: 400px;
+    }
+}
+
 /* about vision end */
 
 .fancybox-layout2 .fancybox-item {
@@ -1476,7 +1544,8 @@ banner-subtitle-text {
     line-height: 1.50;
 }
 
-.a-banner-content #page-content.banner-title__text > p:first-of-type {
+.a-banner-content #page-content.banner-title__text > p:first-of-type,
+.a-banner-content #enquiry-form.banner-title__text > p:first-of-type {
     display: inline;
     margin: 0;
     padding: 0;
@@ -1487,10 +1556,12 @@ banner-subtitle-text {
     padding: 0;
 }
 
-.a-banner-content #page-content.banner-title__text > .site-name {
+.a-banner-content #page-content.banner-title__text > .site-name,
+.a-banner-content #enquiry-form.banner-title__text > .site-name {
     display: inline;
+    margin: 0;
+    padding: 0;
 }
-
 .brand-sup {
     font-size: 0.4em !important;
     vertical-align: super !important;
@@ -1790,6 +1861,34 @@ banner-subtitle-text {
     margin-bottom: 14px !important;
 }
 
+.about-content ul {
+    list-style: disc;
+    padding-left: 1.5em;
+    margin: 0 0 1em;
+}
+.about-content ol {
+    list-style: decimal;
+    padding-left: 1.5em;
+    margin: 0 0 1em;
+}
+.about-content li {
+    margin-bottom: 0.4em;
+}
+
+.about_us_box ul {
+    list-style: disc;
+    padding-left: 1.5em;
+    margin: 0 0 1em;
+}
+.about_us_box ol {
+    list-style: decimal;
+    padding-left: 1.5em;
+    margin: 0 0 1em;
+}
+.about_us_box li {
+    margin-bottom: 0.4em;
+}
+
 @media (max-width: 1024px) {
     .about-section {
         padding: 30px 16px;
@@ -1810,7 +1909,11 @@ banner-subtitle-text {
         padding: 24px 16px;
     }
 
-    .about-content,
+      .about-content {
+        max-width: 100%;
+        max-height: none;   /* remove the cap so it grows naturally */
+    }
+
     .about-image {
         max-width: 100%;
         max-height: 325px;
