@@ -242,12 +242,17 @@ ul {
     object-fit: cover;
     border-radius: 40px;
 }
-
 .about_us_box h2 {
     font-weight: 800;
     font-size: 36px;
+    line-height: 1.2;
     margin-bottom: 5px;
     overflow-wrap: anywhere;
+    flex: 0 0 auto;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
 }
 
 /* NEW: single scroll wrapper for all body content */
@@ -1904,7 +1909,11 @@ banner-subtitle-text {
         padding: 24px 16px;
     }
 
-    .about-content,
+      .about-content {
+        max-width: 100%;
+        max-height: none;   /* remove the cap so it grows naturally */
+    }
+
     .about-image {
         max-width: 100%;
         max-height: 325px;
