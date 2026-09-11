@@ -102,7 +102,6 @@ foreach (getCertificate($conn, 'blog') as $certificate) {
         'img' => getCertificateImageUrl($certificate['cert_img'])
     ];
 }
-$certifications = array_slice($certifications, 0, 12);
 
 $auditRes = mysqli_prepare($conn, "SELECT audit_title, audit_description FROM blog_page_settings WHERE site_id = ?");
 mysqli_stmt_bind_param($auditRes, "i", $site_id);
@@ -163,7 +162,8 @@ $audit_description = !empty($auditRow['audit_description']) ? $auditRow['audit_d
 
       .post-content{ color:#444; line-height:1.75; }
       .post-content h2, .post-content h3{ color:var(--brand); font-weight:600; margin:26px 0 10px; }
-      .post-content p{ margin-bottom:14px; }
+      .post-content p{ margin:0 0 14px; }
+      .post-content p:last-child{ margin-bottom:0; }
       .post-content ul{ list-style:none; padding:0; margin:0 0 14px; display:grid; grid-template-columns:1fr 1fr; gap:8px 20px; }
       .post-content ul li{ position:relative; padding-left:26px; font-size:.92rem; }
       .post-content ul li::before{ content:'\2713'; position:absolute; left:0; top:1px; width:17px; height:17px; border-radius:50%; background:var(--brand); color:#fff; font-size:.62rem; display:flex; align-items:center; justify-content:center; }
@@ -181,7 +181,9 @@ $audit_description = !empty($auditRow['audit_description']) ? $auditRow['audit_d
       .qa-box{ background:var(--brand-light); border-radius:10px; padding:18px 20px; display:flex; gap:14px; margin:22px 0; }
       .qa-box .ico{ width:38px; height:38px; border-radius:50%; background:var(--brand); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
       .qa-box h4{ color:var(--brand); font-size:1rem; margin-bottom:6px; font-weight:600; }
-      .qa-box p{ font-size:.88rem; color:#555; margin:0; line-height:1.6; }
+      .qa-box .qa-content{ font-size:.88rem; color:#555; line-height:1.6; }
+      .qa-box .qa-content p{ margin:0 0 12px; }
+      .qa-box .qa-content p:last-child{ margin-bottom:0; }
 
       .tags-share{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin:24px 0; padding-top:18px; border-top:1px solid #eee; }
       .tag-pill{ background:#f1f1f1; color:#444; padding:5px 12px; border-radius:20px; font-size:.78rem; margin-right:6px; display:inline-block; }
@@ -269,7 +271,7 @@ $audit_description = !empty($auditRow['audit_description']) ? $auditRow['audit_d
 
          <h2 style="color:var(--brand-dark); font-size:1.25rem; font-weight:600; margin-bottom:10px;"><?php echo htmlspecialchars($intro_heading); ?></h2>
          <div class="post-content">
-            <p><?php echo rt_clean($blog['intro_content']); ?></p>
+            <?php echo rt_clean($blog['intro_content']); ?>
          </div>
 
          <?php if (!empty($feature_list)): ?>
@@ -301,10 +303,10 @@ $audit_description = !empty($auditRow['audit_description']) ? $auditRow['audit_d
          <?php if (!empty($blog['qa_content'])): ?>
          <div class="qa-box">
             <div class="ico">&#128737;</div>
-            <div>
-               <h4><?php echo htmlspecialchars($qa_heading); ?></h4>
-               <p><?php echo rt_clean($blog['qa_content']); ?></p>
-            </div>
+             <div>
+                <h4><?php echo htmlspecialchars($qa_heading); ?></h4>
+                <div class="qa-content"><?php echo rt_clean($blog['qa_content']); ?></div>
+             </div>
          </div>
          <?php endif; ?>
 
@@ -339,7 +341,7 @@ $audit_description = !empty($auditRow['audit_description']) ? $auditRow['audit_d
          <?php endif; ?>
       </div>
 
- <div class="blog-sidebar">
+      <div class="blog-sidebar">
          <div class="cert-widget">
             <div class="cert-header"><h3>Certificates</h3><small>Added from Admin</small></div>
             <div class="cert-grid">
