@@ -6,11 +6,6 @@ $aboutUs = null;
 
 $sql = "SELECT * FROM about_us WHERE oursite_id = ? AND deleted_at IS NULL AND status = 'active' LIMIT 1";
 
-//   echo"<pre>";
-//     var_dump($sql);
-//     die;
-
-
 $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, 'i', $siteId);
 $siteId = SITE_ID; // bind_param needs a variable, not a constant directly
@@ -18,9 +13,6 @@ mysqli_stmt_bind_param($stmt, 'i', $siteId);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 $aboutUs = mysqli_fetch_assoc($result);
-// echo "<pre>";
-// echo '<pre>' . htmlspecialchars(print_r($aboutUs, true)) . '</pre>';
-// die();
 
 mysqli_stmt_close($stmt);
 

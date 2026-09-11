@@ -160,7 +160,7 @@ function getBroucher($conn)
 {
     $brochureStmt = mysqli_prepare(
         $conn,
-        "SELECT name, file_path 
+        "SELECT name, file_path, status 
          FROM brochures 
          WHERE site_id = ? 
          AND status = 'active' 

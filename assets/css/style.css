@@ -2370,7 +2370,7 @@ textarea {
     /* Reset line-height to fit padding */
     font-size: 16px;
     /* Match existing font size */
-    font-weight: 600;
+    /* font-weight: 600; */
     /* Match existing font weight */
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -3736,6 +3736,20 @@ body {
     top: 0px !important;
     position: static !important;
 }
+.home-lang-btn{
+        color: white;
+    font-size: 14.5px;
+    background-color: #843f38;
+    border-radius: 10px;
+    border: 1px solid #843f38 !important;
+    font-weight: 300;
+
+}
+.home-lang-btn:hover {
+    background-color: black !important;
+    color: #ffffffff !important;
+    border: 1px solid #201d1d !important;
+}
 
 .lang-switcher{
     margin-right: -32px;
@@ -3747,7 +3761,17 @@ body {
     background-color: #843f38;
     border-radius: 10px;
     border: 1px solid #843f38 !important;
+    font-weight: 300;
 }
+
+
+.lang-btn:hover {
+    background-color: var(--white-f);
+    color: var(--black) !important;
+    border: 1px solid #0e0d0d !important;
+
+}
+
 /* languge scrollbar */
 .dropdown-menu.lang-dropdown-menu {
     max-height: 320px !important;
@@ -3790,3 +3814,4 @@ body {
 .rich-content .rc-gap {
     margin-top: 12px !important;
 }
+/* End description spacing*/

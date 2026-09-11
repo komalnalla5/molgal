@@ -13,7 +13,7 @@
     integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="shortcut icon" href="assets/img/fevicon.png" alt="title image" type="image/x-icon" loading="lazy">
+<link rel="icon" type="image/x-icon" href="<?php echo ADMIN_BASE_URL; ?>assets/images/fevicon.png">
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
@@ -114,25 +114,28 @@ $superScriptClass  = $brandSuper['class'];
                                 <li><a href="contact.php">Contact us</a></li>
                             </ul>
                         </div>
-                        <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn res-menu-btn" target="_blank" rel="noopener noreferrer">Brochure
-                            <i class="fa fa-angle-right"></i>
-                        </a>
+                        <?php if (!empty($getBroucher) && $getBroucher['status'] == "active"): ?>
+                            <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn res-menu-btn" target="_blank" rel="noopener noreferrer">Brochure
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <?php endif; ?>
                     </div>
                     <div class="rv-28-menu-BookNow">
-                        <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn" target="_blank" rel="noopener noreferrer"> Brochure
-                            <i class="fa fa-angle-right"></i>
-                        </a>
-                       
+                        <?php if (!empty($getBroucher) && $getBroucher['status'] == "active"): ?>
+                            <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>" class="a-book-btn" target="_blank" rel="noopener noreferrer"> Brochure
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <?php endif; ?>
                         <button class="rv-3-def-btn rv-1-header-mobile-menu-btn d-lg-none d-inline-block"
                             id="rv-1-header-mobile-menu-btn" aria-label="Open menu">
                             <i class="fa fa-bars" aria-hidden="true"></i>
                         </button>
                     </div>
                     <!-- Custom Language Switcher (moved outside) -->
-                        <div class="lang-switcher dropdown header1-language">
-                            <button class="lang-btn dropdown-toggle" type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="lang-switcher dropdown header1-language notranslate" translate="no">
+                            <button class="home-lang-btn dropdown-toggle" type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="https://flagcdn.com/w20/gb.png" alt="" class="lang-flag" id="currentLangFlag" style="display:none;">
-                                <span id="currentLangName">Select Language</span>
+                                <span id="currentLangName" class="currentLangName" style="font-weight: 100 !important;">Select Language</span>
                             </button>
                             <ul class="dropdown-menu lang-dropdown-menu" aria-labelledby="langDropdownBtn">
                                 <?php foreach ($languages as $code => $lang): ?>

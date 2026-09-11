@@ -1,7 +1,7 @@
  <?php
     include_once('helper.php');
     include_once('config.php');
-    $getBroucher = getBroucher($conn);
+    $getBroucher = getBroucher($conn); 
     $languages = include __DIR__ . '/languages.php';
 
     $siteStmt = mysqli_prepare($conn, "SELECT 
@@ -37,7 +37,8 @@ if (!$headerSite) {
  <link rel="stylesheet" href="assets/css/style.css">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
- <link rel="shortcut icon" href="assets/img/fevicon.png" alt="title image" type="image/x-icon" loading="lazy">
+<link rel="icon" type="image/x-icon" href="<?php echo ADMIN_BASE_URL; ?>assets/images/fevicon.png">
+
  </head>
  
  <header class="rv-1-header rv-inner-header to-be-fixed">
@@ -91,8 +92,8 @@ if (!$headerSite) {
 
              <div class="col-lg-3 col-8 col-xxs-6 text-end order-1 order-lg-2">
                  <div class="d-flex justify-content-end">
+                  <?php if (!empty($getBroucher) && $getBroucher['status'] == "active"): ?>
                      <div class="rv-inner-header-right-btns">
-                        <!-- <a href="login.html"><i class="fa fa-user"></i>Login</a> -->
                         <a href="<?php echo htmlspecialchars($getBroucher['file_path']); ?>"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -100,8 +101,9 @@ if (!$headerSite) {
                                 Brochure 
                         </a>
                      </div>
+                    <?php endif; ?>
                         <!-- Custom Language Switcher (moved outside) -->
-                        <div class="lang-switcher dropdown">
+                        <div class="lang-switcher dropdown notranslate" translate="no">
                             <button class="lang-btn dropdown-toggle" type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="https://flagcdn.com/w20/gb.png" alt="" class="lang-flag" id="currentLangFlag" style="display:none;">
                                 <span id="currentLangName">Select Language</span>
