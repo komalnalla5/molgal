@@ -259,7 +259,7 @@ $showEnquiryForm =
                         </h1>
 
                         <div id="page-content" class="banner-title__text">
-                            <span class="site-name" translate="no" class="notranslate">
+                            <span class="site-name">
                                  <?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?><?php if ($subName !== ''): ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($subName, ENT_QUOTES, 'UTF-8'); ?>
                                     </sup>
                                 <?php endif; ?>

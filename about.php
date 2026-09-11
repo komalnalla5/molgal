@@ -113,9 +113,9 @@ if (!function_exists('renderRichContentHtml')) {
                <?php echo renderRichContentHtml($aboutUs['about_us_description']); // stored as HTML/rich text ?>
             <?php else: ?>
                 <h2>MUBY CHEM PRIVATE LIMITED</h2>
-                <p>Muby Chem Pvt. Ltd. was established in 1976 and has grown into a reputable, customer-focused manufacturer of high-purity pharmaceutical components, mineral salts, excipients and specialty chemicals. We serve industries globally including pharma, food & beverages, cosmetics and more.<br><br>
-                Our production capabilities cover grades like IP, BP, USP, Ph. Eur., JP, CP, FCC, Analytical Reagent, LR, Pure and Technical—all tested to meet international standards.<br><br>
-                With over 400 products in our portfolio, we ensure accuracy, compliance and service to a wide range of sectors.</p>
+                <p>Muby Chem Pvt. Ltd. was established in 1976 and has grown into a reputable, customer-focused manufacturer of high-purity pharmaceutical components, mineral salts, excipients and specialty chemicals. We serve industries globally including pharma, food & beverages, cosmetics and more.</p>
+                <p>Our production capabilities cover grades like IP, BP, USP, Ph. Eur., JP, CP, FCC, Analytical Reagent, LR, Pure and Technical—all tested to meet international standards.</p>
+                <p>With over 400 products in our portfolio, we ensure accuracy, compliance and service to a wide range of sectors.</p>
             <?php endif; ?>
         </div>
     </section>
@@ -133,9 +133,11 @@ if (!function_exists('renderRichContentHtml')) {
                     <?php if (!empty($section['title'])): ?>
                         <h2><?php echo htmlspecialchars($section['title']); ?></h2>
                     <?php endif; ?>
+                    <div class="about_us_body">
                     <?php if (!empty($section['description'])): ?>
                         <?php echo renderRichContentHtml($section['description']); ?>
                     <?php endif; ?>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
