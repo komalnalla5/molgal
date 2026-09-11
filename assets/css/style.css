@@ -3642,41 +3642,35 @@ body {
     top: 0px !important;
     position: static !important;
 }
-.home-lang-btn{
-        color: white;
-    font-size: 14.5px;
-    background-color: #843f38;
-    border-radius: 10px;
-    border: 1px solid #843f38 !important;
-    font-weight: 300;
 
-}
-.home-lang-btn:hover {
-    background-color: black !important;
-    color: #ffffffff !important;
-    border: 1px solid #201d1d !important;
-}
-
+/* laungauge button sep10 */
 .lang-switcher{
     margin-right: -32px;
     margin-left: 13px;
 }
-.lang-btn{
+.hp2-lang-btn{
+    padding: 9px 13px !important;
+    font-weight: 100 !important;
+}
+.home-lang-btn{
     color: white;
-    font-size: 14.5px;
-    background-color: #843f38;
+    font-size: 13px;
+    background-color: transparent;
     border-radius: 10px;
-    border: 1px solid #843f38 !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
     font-weight: 300;
-}
-
-
-.lang-btn:hover {
-    background-color: var(--white-f);
-    color: var(--black) !important;
-    border: 1px solid #0e0d0d !important;
+    padding: 6px 10px;
+    white-space: nowrap;
+    width: fit-content;
+        padding: 10px 10px;
 
 }
+.home-lang-btn:hover,
+.home-lang-btn:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #fff !important;
+}
+ /* end */
 
 /* languge scrollbar */
 .dropdown-menu.lang-dropdown-menu {

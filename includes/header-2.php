@@ -104,7 +104,7 @@ if (!$headerSite) {
                     <?php endif; ?>
                         <!-- Custom Language Switcher (moved outside) -->
                         <div class="lang-switcher dropdown notranslate" translate="no">
-                            <button class="lang-btn dropdown-toggle" type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="lang-btn dropdown-toggle hp2-lang-btn" type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" >
                                 <img src="https://flagcdn.com/w20/gb.png" alt="" class="lang-flag" id="currentLangFlag" style="display:none;">
                                 <span id="currentLangName">Select Language</span>
                             </button>
