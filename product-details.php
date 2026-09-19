@@ -182,7 +182,7 @@ mysqli_stmt_close($prodStmt);
 
 
 // Fetch specifications for this product (if any)
-$specStmt = mysqli_prepare($conn, "SELECT test_name, specification_value,sr_no FROM product_specifications WHERE product_id = ? AND site_id = ? ORDER BY sr_no ASC");
+$specStmt = mysqli_prepare($conn, "SELECT test_name, specification_value,sr_no FROM product_specifications WHERE product_id = ? AND site_id = ? AND deleted_at IS NULL ORDER BY sr_no ASC");
 mysqli_stmt_bind_param($specStmt, 'ii', $product['id'], $siteIdParam);
 mysqli_stmt_execute($specStmt);
 $specResult = mysqli_stmt_get_result($specStmt);
@@ -193,7 +193,7 @@ while ($row = mysqli_fetch_assoc($specResult)) {
 mysqli_stmt_close($specStmt);
 
 // Fetch typical properties for this product (if any)
-$propStmt = mysqli_prepare($conn, "SELECT properties, typical_value, sr_no FROM product_properties WHERE product_id = ? AND site_id = ? ORDER BY sr_no ASC");
+$propStmt = mysqli_prepare($conn, "SELECT properties, typical_value, sr_no FROM product_properties WHERE product_id = ? AND site_id = ?  ORDER BY sr_no ASC");
 mysqli_stmt_bind_param($propStmt, 'ii', $product['id'], $siteIdParam);
 mysqli_stmt_execute($propStmt);
 $propResult = mysqli_stmt_get_result($propStmt);
@@ -268,6 +268,7 @@ $superScriptClass  = $brandSuper['class'];
                 <h1 ><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo renderProductFormulaText($product['product_code']); ?></h1>
                 <h2><?php echo renderProductFormulaText($product['product_name']); ?></h2>
                 <p>(<?php echo renderProductFormulaText($product['usage_tag']); ?>)</p>
+                <p><?php echo renderProductFormulaText($product['dmf_no']); ?></p>
             </div>
             <!-- product hero section right side image -->
             <div class="right-box">
