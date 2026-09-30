@@ -63,11 +63,7 @@ $superScriptClass  = $brandSuper['class'];
     <marquee>
         <p class="top-navbar">
             <span class="site-name">
-                <?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?>
-                <?php if ($subName !== ''): ?>
-                    <sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>">
-                        <?php echo htmlspecialchars($subName, ENT_QUOTES, 'UTF-8'); ?>
-                    </sup>
+                <?php echo htmlspecialchars($siteName, ENT_QUOTES, 'UTF-8'); ?><?php if ($subName !== ''): ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($subName, ENT_QUOTES, 'UTF-8'); ?></sup>
                     <?php echo htmlspecialchars($headerSite['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
                 <?php endif; ?>
             </span>

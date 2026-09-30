@@ -133,6 +133,7 @@ ul {
     color: #000;
     font-weight: 500;
     margin-bottom: 5px;
+    overflow-wrap: anywhere; 
 }
 
 .more-btn {
@@ -3804,7 +3805,7 @@ body {
 }
 
 /* manage spacing for aboutus description */
-.rich-content p,
+/* .rich-content p,
 .rich-content h1,
 .rich-content h2,
 .rich-content h3,
@@ -3813,7 +3814,7 @@ body {
 .rich-content h6 {
     margin: 0 !important;
     padding: 0 !important;
-}
+} */
 .rich-content .rc-gap {
     margin-top: 12px !important;
 }
