@@ -75,7 +75,6 @@ foreach (getCertificate($conn, 'blog') as $certificate) {
         'img' => getCertificateImageUrl($certificate['cert_img'])
     ];
 }
-$certifications = array_slice($certifications, 0, 10);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,9 +93,9 @@ $certifications = array_slice($certifications, 0, 10);
       .blog-hero-bg{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
       .blog-hero-shape{ position:absolute; inset:0; width:100%; height:100%; z-index:1; }
       .blog-hero-inner{ position:relative; z-index:2; display:flex; min-height:340px; }
-      .blog-hero-left{ width:56%; padding:60px 50px; display:flex; flex-direction:column; justify-content:center; color:#fff; }
-      .blog-hero-left h1{ font-family:'Playfair Display', serif; font-size:2.6rem; line-height:1.2; margin-bottom:10px; }
-      .blog-hero-left p{ opacity:.85; margin-bottom:8px; font-size:1rem; }
+.blog-hero-left{ width:50%; padding:55px clamp(80px, 9vw, 170px) 55px 50px; display:flex; flex-direction:column; justify-content:center; color:#fff; }
+.blog-hero-left h1{ max-width:100%; font-family:'Playfair Display', serif; font-size:2.6rem; line-height:1.2; margin-bottom:10px; overflow-wrap:anywhere; }
+.blog-hero-left p{ max-width:100%; opacity:.85; margin-bottom:8px; font-size:1rem; line-height:1.55; overflow-wrap:anywhere; }
       .subtitle-line{ width:36px; height:2px; background:rgba(255,255,255,.5); margin-bottom:22px; }
       .stat-pill svg{ width:15px; height:15px; flex-shrink:0; }
       .blog-hero-right{ flex:1; }
@@ -191,8 +190,8 @@ $certifications = array_slice($certifications, 0, 10);
       </svg>
       <div class="blog-hero-inner">
          <div class="blog-hero-left">
-            <h1><?php echo htmlspecialchars($hero_title); ?></h1>
-            <p><?php echo htmlspecialchars($hero_subtitle); ?></p>
+            <h1><?php echo nl2br(htmlspecialchars($hero_title, ENT_QUOTES, 'UTF-8')); ?></h1>
+            <p><?php echo nl2br(htmlspecialchars($hero_subtitle, ENT_QUOTES, 'UTF-8')); ?></p>
             <div class="subtitle-line"></div>
             <div class="stat-pills">
                <span class="stat-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v5h5M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/></svg> <?php echo $total_articles; ?> Articles</span>
@@ -285,39 +284,39 @@ $certifications = array_slice($certifications, 0, 10);
       </div>
 
       <div class="blog-sidebar">
-               <div class="cert-widget">
-                  <div class="cert-header">
-                     <div style="font-size:1.3rem;">&#127942;</div>
-                     <div>
-                        <h3>Certificates</h3>
-                        <small>Added from Admin</small>
-                     </div>
-                  </div>
-                  <div class="cert-grid">
-                     <?php if (!empty($certifications)): foreach ($certifications as $c): ?>
-                        <div class="cert-cell">
-                           <img src="<?php echo htmlspecialchars($c['img']); ?>" alt="<?php echo htmlspecialchars($c['label']); ?>" loading="lazy" onerror="this.style.display='none'">
-                           <span><?php echo htmlspecialchars($c['label']); ?></span>
-                        </div>
-                     <?php endforeach; else: ?>
-                        <p class="text-muted small mb-0">No certificates added yet.</p>
-                     <?php endif; ?>
-                  </div>
-               </div>
-
-               <div class="audit-box">
-                  <div class="ico">&#128737;</div>
-                  <div>
-                     <h3><?php echo htmlspecialchars($audit_title); ?></h3>
-                     <p><?php echo htmlspecialchars($audit_description); ?></p>
-                  </div>
-                  <svg class="hex-corner" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
-                     <path d="M17 0 L53 0 L70 30 L53 60 L17 60 L0 30 Z" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="1.5"/>
-                     <path d="M27 15 L43 15 L51 30 L43 45 L27 45 L19 30 Z" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="1.5"/>
-                  </svg>
+         <div class="cert-widget">
+            <div class="cert-header">
+               <div style="font-size:1.3rem;">&#127942;</div>
+               <div>
+                  <h3>Certificates</h3>
+                  <small>Added from Admin</small>
                </div>
             </div>
+            <div class="cert-grid">
+               <?php if (!empty($certifications)): foreach ($certifications as $c): ?>
+                  <div class="cert-cell">
+                     <img src="<?php echo htmlspecialchars($c['img']); ?>" alt="<?php echo htmlspecialchars($c['label']); ?>" loading="lazy" onerror="this.style.display='none'">
+                     <span><?php echo htmlspecialchars($c['label']); ?></span>
+                  </div>
+               <?php endforeach; else: ?>
+                  <p class="text-muted small mb-0">No certificates added yet.</p>
+               <?php endif; ?>
+            </div>
          </div>
+
+         <div class="audit-box">
+            <div class="ico">&#128737;</div>
+            <div>
+               <h3><?php echo htmlspecialchars($audit_title); ?></h3>
+               <p><?php echo htmlspecialchars($audit_description); ?></p>
+            </div>
+            <svg class="hex-corner" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+               <path d="M17 0 L53 0 L70 30 L53 60 L17 60 L0 30 Z" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="1.5"/>
+               <path d="M27 15 L43 15 L51 30 L43 45 L27 45 L19 30 Z" fill="none" stroke="#ffffff" stroke-opacity="0.5" stroke-width="1.5"/>
+            </svg>
+         </div>
+      </div>
+   </div>
 
    <?php include('includes/footer.php'); ?>
 </html>
