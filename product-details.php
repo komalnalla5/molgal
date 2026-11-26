@@ -9,14 +9,27 @@ if (!function_exists('formatProductFormulaTokens')) {
         $group = '(?:' . $atom . '|\\((?:' . $atom . ')+\\)\\d*)';
         $pattern = '/(?<![A-Za-z0-9])'
             . '(?=[A-Za-z0-9().·]*\\d)'
+            . '(?=[A-Za-z0-9().路]*\\d)'
             . '(?:' . $group . ')+'
             . '(?:[·.]\\d*(?:' . $group . ')+)*'
+            . '(?:[路.]\\d*(?:' . $group . ')+)*'
             . '(?![A-Za-z0-9])/u';
 
         $formatted = preg_replace_callback(
             $pattern,
             static function ($matches) {
                 $candidate = $matches[0];
+
+                // Pharmacopoeial colour references are not chemical formulas,
+                // but their numeric suffix is conventionally shown as subscript.
+                // Examples: Y5, BY5 and GY5.
+                if (preg_match('/^(?:Y|BY|GY)\\d+$/i', $candidate)) {
+                    return preg_replace(
+                        '/(?<=[A-Za-z])(\\d+)/',
+                        '<sub>$1</sub>',
+                        $candidate
+                    );
+                }
 
                 if (preg_match(
                     '/^(?:USP|NF|IP|BP|EP|JP|ISO|ASTM|ICH)\\d/i',
@@ -100,7 +113,7 @@ if (!function_exists('formatProductFormulaTokens')) {
             : $formatted;
     }
 
-    function renderProductFormulaHtml($html)
+    function renderProductFormulaHtml($html, $plainTextTokens = [])
     {
         $html = stripEmptyParagraphs($html);
         $parts = preg_split(
@@ -118,9 +131,59 @@ if (!function_exists('formatProductFormulaTokens')) {
             if ($part === '' || $part[0] === '<') {
                 continue;
             }
-            $parts[$index] = formatProductFormulaTokens($part);
+
+            // Temporarily protect selected literal text (such as Product Short
+            // Name) from chemical-formula formatting in rich-text descriptions.
+            $protectedTokens = [];
+            foreach ((array) $plainTextTokens as $tokenIndex => $plainToken) {
+                $plainToken = trim((string) $plainToken);
+                if ($plainToken === '') {
+                    continue;
+                }
+
+                $escapedToken = htmlspecialchars(
+                    $plainToken,
+                    ENT_QUOTES | ENT_SUBSTITUTE,
+                    'UTF-8'
+                );
+                $placeholder = "\x1Ashortname" . $tokenIndex . "\x1A";
+                $part = preg_replace_callback(
+                    '/(?<![A-Za-z0-9])' . preg_quote($escapedToken, '/') . '(?![A-Za-z0-9])/iu',
+                    static function () use (&$protectedTokens, $placeholder, $escapedToken) {
+                        $protectedTokens[$placeholder] = $escapedToken;
+                        return $placeholder;
+                    },
+                    $part
+                ) ?? $part;
+            }
+
+            $part = formatProductFormulaTokens($part);
+            foreach ($protectedTokens as $placeholder => $literalToken) {
+                $part = str_replace($placeholder, $literalToken, $part);
+            }
+            $parts[$index] = $part;
         }
         return implode('', $parts);
+    }
+}
+
+if (!function_exists('normaliseProductSpecificationForDisplay')) {
+    function normaliseProductSpecificationForDisplay($value, $testName): string
+    {
+        $value = str_replace(["\r\n", "\r"], "\n", (string) $value);
+        $testName = str_replace(["\r\n", "\r"], "\n", (string) $testName);
+        $value = preg_replace_callback(
+            '/(?m)^([ \t]*)(\()?([a-z])(\))(?=\s|$)/u',
+            static fn ($match) => $match[1] . $match[2] . strtoupper($match[3]) . $match[4],
+            $value
+        );
+        $firstLine = ltrim((string) $value, "\n");
+        if (str_contains($testName, "\n")
+            && !preg_match('/^Test\s*\(/iu', $testName)
+            && preg_match('/^(?:\([A-Z]\)|[A-Z]\))(?=\s|$)/u', $firstLine)) {
+            return "\n" . $firstLine;
+        }
+        return (string) $value;
     }
 }
 
@@ -133,7 +196,7 @@ if (!function_exists('stripEmptyParagraphs')) {
 
 // fixed description spacing issue
 if (!function_exists('renderRichContentHtml')) {
-    function renderRichContentHtml($html)
+    function renderRichContentHtml($html, $applyFormulaFormatting = true, $plainTextTokens = [])
     {
         $pendingGap = false;
         $html = preg_replace_callback(
@@ -160,7 +223,9 @@ if (!function_exists('renderRichContentHtml')) {
             },
             (string) $html
         );
-        return renderProductFormulaHtml($html);
+        return $applyFormulaFormatting
+            ? renderProductFormulaHtml($html, $plainTextTokens)
+            : $html;
     }
 }
 
@@ -193,7 +258,7 @@ while ($row = mysqli_fetch_assoc($specResult)) {
 mysqli_stmt_close($specStmt);
 
 // Fetch typical properties for this product (if any)
-$propStmt = mysqli_prepare($conn, "SELECT properties, typical_value, sr_no FROM product_properties WHERE product_id = ? AND site_id = ?  ORDER BY sr_no ASC");
+$propStmt = mysqli_prepare($conn, "SELECT properties, typical_value, sr_no FROM product_properties WHERE product_id = ? AND site_id = ? ORDER BY sr_no ASC");
 mysqli_stmt_bind_param($propStmt, 'ii', $product['id'], $siteIdParam);
 mysqli_stmt_execute($propStmt);
 $propResult = mysqli_stmt_get_result($propStmt);
@@ -265,10 +330,10 @@ $superScriptClass  = $brandSuper['class'];
         <div class="det-container">
             <!-- product hero section left content -->
             <div class="left-box product-left-content">
-                <h1 ><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo renderProductFormulaText($product['product_code']); ?></h1>
+                <h1 ><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo htmlspecialchars((string) ($product['product_code'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></h1>
                 <h2><?php echo renderProductFormulaText($product['product_name']); ?></h2>
                 <p>(<?php echo renderProductFormulaText($product['usage_tag']); ?>)</p>
-                <p><?php echo renderProductFormulaText($product['dmf_no']); ?></p>
+                <p><?php echo renderProductFormulaText($product['dmf_no']); ?></p>  
             </div>
             <!-- product hero section right side image -->
             <div class="right-box">
@@ -282,7 +347,7 @@ $superScriptClass  = $brandSuper['class'];
                 <?php
                     $imgDesc = preg_replace('/^\s*<p[^>]*>|<\/p>\s*$/i', '', trim($product['img_description']));
                 ?>
-                <strong  class=" img-description"><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']);?></sup> <?php echo renderProductFormulaText($product['product_code']); ?></strong> <?php echo renderProductFormulaHtml($imgDesc); ?> 
+                <strong  class=" img-description"><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']);?></sup> <?php echo htmlspecialchars((string) ($product['product_code'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></strong> <?php echo renderProductFormulaHtml($imgDesc); ?> 
             </div>
         <?php endif; ?>
     </div>
@@ -294,7 +359,7 @@ $superScriptClass  = $brandSuper['class'];
             <div class="det-content">
                 <div class="left">
                     <h2 class="product-left-title">
-                        <?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo renderProductFormulaText($product['product_code']); ?>
+                        <?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo htmlspecialchars((string) ($product['product_code'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>
                     </h2>
                     <?php if (!empty($product['intro_by'])): ?>
                     <p style="margin-right: 50px;">
@@ -313,7 +378,7 @@ $superScriptClass  = $brandSuper['class'];
                     <h2><?php echo renderProductFormulaText($product['product_name']); ?></h2>
                     <?php if (!empty($product['intro_text'])): ?>
                         <div class="rich-content">
-                           <?php echo renderRichContentHtml($product['intro_text']); ?>
+                           <?php echo renderRichContentHtml($product['intro_text'], false, [$product['product_code'] ?? '']); ?>
                         </div>
                     <?php endif; ?>
                     <div class="buttons">
@@ -332,7 +397,7 @@ $superScriptClass  = $brandSuper['class'];
     <?php if ($hasTypicalProps): ?>
     <div class="det-wrapper">
         <div class="spec-table-det-container">
-            <h2><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo renderProductFormulaText($product['product_code']); ?> TYPICAL PROPERTIES</h2>
+            <h2><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo htmlspecialchars((string) ($product['product_code'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?> TYPICAL PROPERTIES</h2>
             <table>
                 <thead>
                     <tr><th>#</th><th>PROPERTY</th><th>TYPICAL VALUE</th></tr>
@@ -365,7 +430,34 @@ $superScriptClass  = $brandSuper['class'];
                         <tr>
                             <td><?php echo htmlspecialchars($spec['sr_no'] ?? ''); ?></td>
                             <td><?php echo renderProductFormulaText($spec['test_name'], true); ?></td>
-                            <td><?php echo renderProductFormulaText($spec['specification_value'], true); ?></td>
+
+<td>
+<?php
+$specValue = normaliseProductSpecificationForDisplay(
+    $spec['specification_value'],
+    $spec['test_name']
+);
+
+// Agar database mein pehle se <sub>8</sub> saved hai,
+// to use normal B8 mein convert karo.
+$specValue = preg_replace(
+    '/B\s*(?:<sub>\s*8\s*<\/sub>|&lt;sub&gt;\s*8\s*&lt;\/sub&gt;|8)/i',
+    'B8',
+    (string) $specValue
+);
+
+// Pehle text safe karo, phir 8 ko subscript banao.
+$specHtml = htmlspecialchars(
+    $specValue,
+    ENT_QUOTES | ENT_SUBSTITUTE,
+    'UTF-8'
+);
+
+
+
+echo nl2br($specHtml, false);
+?>
+</td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -378,7 +470,7 @@ $superScriptClass  = $brandSuper['class'];
     <div class="det-wrapper">
         <div class="spec-table-det-container">
             <div class="rich-content">
-               <?php echo renderRichContentHtml($product['package_description']); ?>
+               <?php echo renderRichContentHtml($product['package_description'], false); ?>
             </div>
         </div>
     </div>
