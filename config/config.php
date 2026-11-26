@@ -26,5 +26,5 @@ if (!defined('SITE_ID')) {
 // While testing locally this can stay as your local admin panel URL, e.g. http://localhost/mubychemadmin/
 // Update it to the real domain once mubychemadmin goes live on the server.
 if (!defined('ADMIN_BASE_URL')) {
-    define('ADMIN_BASE_URL', 'http://localhost/mubychemadmin/');
+    define('ADMIN_BASE_URL', 'http://localhost/mubyadmin/');
 }

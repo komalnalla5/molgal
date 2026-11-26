@@ -168,23 +168,37 @@ if (!function_exists('formatProductFormulaTokens')) {
 }
 
 if (!function_exists('normaliseProductSpecificationForDisplay')) {
+    //existing function
+    // function normaliseProductSpecificationForDisplay($value, $testName): string
+    // {
+    //     $value = str_replace(["\r\n", "\r"], "\n", (string) $value);
+    //     $testName = str_replace(["\r\n", "\r"], "\n", (string) $testName);
+    //     $value = preg_replace_callback(
+    //         '/(?m)^([ \t]*)(\()?([a-z])(\))(?=\s|$)/u',
+    //         static fn ($match) => $match[1] . $match[2] . strtoupper($match[3]) . $match[4],
+    //         $value
+    //     );
+    //     $firstLine = ltrim((string) $value, "\n");
+    //     if (str_contains($testName, "\n")
+    //         && !preg_match('/^Test\s*\(/iu', $testName)
+    //         && preg_match('/^(?:\([A-Z]\)|[A-Z]\))(?=\s|$)/u', $firstLine)) {
+    //         return "\n" . $firstLine;
+    //     }
+    //     return (string) $value;
+    // }
+
     function normaliseProductSpecificationForDisplay($value, $testName): string
-    {
-        $value = str_replace(["\r\n", "\r"], "\n", (string) $value);
-        $testName = str_replace(["\r\n", "\r"], "\n", (string) $testName);
-        $value = preg_replace_callback(
-            '/(?m)^([ \t]*)(\()?([a-z])(\))(?=\s|$)/u',
-            static fn ($match) => $match[1] . $match[2] . strtoupper($match[3]) . $match[4],
-            $value
-        );
-        $firstLine = ltrim((string) $value, "\n");
-        if (str_contains($testName, "\n")
-            && !preg_match('/^Test\s*\(/iu', $testName)
-            && preg_match('/^(?:\([A-Z]\)|[A-Z]\))(?=\s|$)/u', $firstLine)) {
-            return "\n" . $firstLine;
-        }
-        return (string) $value;
-    }
+{
+    // Normalise line endings only (no trimming, so DB spacing is preserved)
+    $value = str_replace(["\r\n", "\r"], "\n", (string) $value);
+
+    // Keep conversion: (a) -> (A), a) -> A)
+    return preg_replace_callback(
+        '/(?m)^([ \t]*)(\()?([a-z])(\))(?=\s|$)/u',
+        static fn ($match) => $match[1] . $match[2] . strtoupper($match[3]) . $match[4],
+        $value
+    );
+}
 }
 
 if (!function_exists('stripEmptyParagraphs')) {
