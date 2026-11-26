@@ -332,10 +332,10 @@ $superScriptClass  = $brandSuper['class'];
     <?php if ($hasTypicalProps): ?>
     <div class="det-wrapper">
         <div class="spec-table-det-container">
-            <h2><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo renderProductFormulaText($product['product_code']); ?> TYPICAL PROPERTIES</h2>
+            <h2><?php echo htmlspecialchars($currentSite['name']); ?><sup class="<?php echo htmlspecialchars($superScriptClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($currentSite['sub_name']); ?></sup> <?php echo renderProductFormulaText($product['product_code']); ?>PROPERTIES</h2>
             <table>
                 <thead>
-                    <tr><th>#</th><th>PROPERTY</th><th>TYPICAL VALUE</th></tr>
+                    <tr><th>#</th><th>PROPERTY</th><th>VALUE</th></tr>
                 </thead>
                 <tbody>
                     <?php foreach ($typicalProperties as $index => $prop): ?>
